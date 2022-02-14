@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Accueil";
+}
+
+<img class="d-block mx-auto mb-4 img-fluid" src="/img/Logo.png">
+
+@if (!@Context.User.Identity.IsAuthenticated)
+{
+    <form asp-action="Login" asp-controller="Twitch" class="py-4">
+        <button class="btn twitch-button"><i class="bi bi-twitch"></i> Se connecter avec Twitch</button>
+    </form>
+
+} else
+{
+        
+<div class="col-lg-4 py-4 mx-auto">
+    <p class="fs-2 text-white"><strong>Salut @Context.User.Identity.Name !</strong> <img src="/img/emotes/leapriHi_1.png" /></p>
+        
+    @if (@Context.User.IsInRole("Viewer"))
+    {
+    <form class="d-grid gap-2 my-4">
+        <input type="text" name="code" placeholder="Code" class="form-control form-control-lg code-input" required/>
+        <button type="submit" class="btn main-button">Rejoindre</button>
+    </form>
+    }
+
+    @if (@Context.User.IsInRole("Admin"))
+    {
+    <form class="d-grid gap-2 my-4">
+        <button type="submit" class="btn main-button">Créer un salon</button>
+    </form>
+    }
+
+</div>
+}
