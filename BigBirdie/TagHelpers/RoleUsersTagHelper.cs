@@ -1,6 +1,7 @@
 ﻿using BigBirdie.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace BigBirdie.TagHelpers
 {
@@ -25,7 +26,7 @@ namespace BigBirdie.TagHelpers
             ApplicationRole role = await RoleManager.FindByIdAsync(Role);
             if (role != null)
             {
-                foreach (var user in UserManager.Users)
+                foreach (var user in UserManager.Users.ToList())
                     if (user != null && await UserManager.IsInRoleAsync(user, role.Name))
                         names.Add(user.UserName);
             }
