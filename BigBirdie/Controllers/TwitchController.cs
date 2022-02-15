@@ -63,11 +63,6 @@ namespace BigBirdie.Controllers
 				if (result2.Succeeded)
 				{
 					var viewerRole = await RoleManager.FindByNameAsync("Viewer");
-					if (viewerRole == null)
-					{
-						await RoleManager.CreateAsync(new ApplicationRole("Viewer"));
-						viewerRole = await RoleManager.FindByNameAsync("Viewer");
-					}
 					if (viewerRole != null)
 						await UserManager.AddToRoleAsync(user, viewerRole.Name);
 					await this.SignInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
