@@ -18,15 +18,15 @@
         
     @if (@Context.User.IsInRole("Viewer"))
     {
-    <form class="d-grid gap-2 my-4">
-        <input type="text" name="code" placeholder="Code" class="form-control form-control-lg code-input" required/>
+    <form class="d-grid gap-2 my-4" asp-action="Join" asp-controller="Quiz" method="get">
+        <input type="text" name="id" placeholder="Code" class="form-control form-control-lg code-input" required/>
         <button type="submit" class="btn main-button">Rejoindre</button>
     </form>
     }
 
     @if (@Context.User.IsInRole("Admin"))
     {
-    <form class="d-grid gap-2 my-4">
+    <form class="d-grid gap-2 my-4" asp-action="Create" asp-controller="Quiz">
         <button type="submit" class="btn main-button">Créer un salon</button>
     </form>
     }

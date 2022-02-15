@@ -9,12 +9,14 @@
 
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Twitch" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Hubs\" />
+    <Folder Include="Views\Quiz\Components\" />
   </ItemGroup>
 
 </Project>

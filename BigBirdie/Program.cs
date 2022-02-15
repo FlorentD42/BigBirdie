@@ -1,8 +1,11 @@
 using BigBirdie.Account;
+using BigBirdie.Hubs;
+using BigBirdie.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -66,8 +69,21 @@ builder.Services
 		};
 	});
 
+builder.Services.AddSignalR();
+builder.Services.AddServerSideBlazor();
+
+builder.Services.AddResponseCompression(opts =>
+{
+	opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+		new[] { "application/octet-stream" });
+});
+
+builder.Services.AddSingleton<QuizService>();
+
 
 var app = builder.Build();
+
+app.UseResponseCompression();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -85,10 +101,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//app.UseSession();
 
 app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapBlazorHub();
+app.MapHub<QuizHub>("/QuizHub");
 
 app.Run();
