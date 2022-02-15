@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace BigBirdie.Controllers
 {
-	//[Authorize(Roles = "Admin")]
+	[Authorize(Roles = "Admin")]
 	public class RoleController : Controller
 	{
 		private readonly RoleManager<ApplicationRole> RoleManager; 
