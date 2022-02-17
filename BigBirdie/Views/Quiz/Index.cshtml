@@ -1,2 +1,46 @@
 ﻿@model string
-<p>Todo :) @Model?.ToString()</p>
+
+@{
+    ViewData["Title"] = "Lobby";
+}
+
+<img class="d-block mx-auto mb-4 img-fluid" src="/img/Logo.png">
+
+<h2 class="pink-content h2-title m-3">Lobby</h2>
+
+<div class="m-3">
+	<div class="row gx-4">
+
+		<div class="col">
+			<div class="pink-content">
+				<h3 class="text-light">Règles du salon</h3>
+				<p>Aucune c’est la fête on fait ce qu’on veut.</p>
+			</div>
+		</div>
+
+
+		<div class="col">
+			<div class="pink-content">
+				<h3>En ligne <span id="onlineSpan"></span></h3>
+				<div class="container px-2 pb-2">
+					<!-- Généré par quiz.js -->
+					<div id="usersDiv" class="row g-2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@if (@Context.User.IsInRole("Admin"))
+{
+<button id="startButton" class="btn main-button mx-2">Commencer</button>
+}
+<button id="leaveButton" class="btn main-button mx-2">Quitter</button>
+
+@section scripts {
+	<script type="text/javascript">
+		var code = "@Model.ToString()";
+	</script>
+	<script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+	<script src="~/js/quiz.js"></script>
+}

@@ -79,3 +79,26 @@ body {
 .code-input {
     border: 5px solid #A50E52;
 }
+
+.h2-title {
+    text-shadow: 2px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.pink-content {
+    color: white;
+    background: #AC4674;
+    box-shadow: 3px 5px 0px 3px #A50E52;
+    border-radius: 10px;
+}
+
+.user-card {
+    background: #44B37F;
+    border-radius: 5px;
+}
+
+.owner-card {
+    background: #047E4F;
+    font-weight: bold;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}

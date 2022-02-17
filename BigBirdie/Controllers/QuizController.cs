@@ -8,15 +8,19 @@ namespace BigBirdie.Controllers
     [Authorize]
     public class QuizController : Controller
     {
-        private readonly QuizService _quizService;
+        private readonly QuizService QuizService;
+
         public QuizController(QuizService quizService)
         {
-            this._quizService = quizService;
+            this.QuizService = quizService;
         }
 
         public IActionResult Index(string id = "")
         {
-            if (!this._quizService.Sessions.Contains(id))
+            if (this.QuizService == null)
+                return RedirectToAction("Index", "Home");
+
+            if (!this.QuizService.AddUser(id, HttpContext.User.Identity?.Name ?? string.Empty))
                 return RedirectToAction("Index", "Home");
 
             return View((object)id);
@@ -25,7 +29,10 @@ namespace BigBirdie.Controllers
         [HttpGet]
         public IActionResult Join(string id = "")
         {
-            if (!this._quizService.Sessions.Contains(id))
+            if (this.QuizService == null)
+                return RedirectToAction("Index", "Home");
+
+            if (!this.QuizService.SessionExists(id))
                 return RedirectToAction("Index", "Home");
 
             return RedirectToAction("Index", new {id = id});
@@ -35,15 +42,15 @@ namespace BigBirdie.Controllers
         [HttpPost]
         public IActionResult Create()
         {
-            // génère un id de groupe
-            string id = this.RandomString(5);
-
-            if (this._quizService == null) 
+            if (this.QuizService == null) 
                 return RedirectToAction("Index", "Home");
 
-            this._quizService.Sessions.Add(id);
+            // génère un id de groupe
+            string id;
+            do {
+                id = this.RandomString(5);
+            } while (!this.QuizService.AddSession(id, HttpContext.User.Identity?.Name ?? string.Empty));
 
-            //return View("Index", id);
             return RedirectToAction("Index", new { id = id });
         }
 

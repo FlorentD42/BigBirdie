@@ -70,7 +70,6 @@ builder.Services
 	});
 
 builder.Services.AddSignalR();
-builder.Services.AddServerSideBlazor();
 
 builder.Services.AddResponseCompression(opts =>
 {
@@ -106,7 +105,6 @@ app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapBlazorHub();
 app.MapHub<QuizHub>("/QuizHub");
 
 app.Run();
