@@ -58,9 +58,12 @@ async function main() {
 
     // bouton Quitter
     $("#leaveButton").click(async () => {
-        await connection.invoke("Logout", code);
-        await connection.stop();
-        document.location.href = "/";
+        if (confirm("Voulez-vous vraiment quitter ?")) {
+            window.onbeforeunload = null;
+            await connection.invoke("Logout", code);
+            await connection.stop();
+            document.location.href = "/";
+        }
     });
 
     $("#startButton").click(async () => {
