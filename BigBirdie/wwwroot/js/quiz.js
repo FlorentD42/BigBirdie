@@ -28,10 +28,16 @@ connection.on("SessionUpdate", (sessionJson) => {
     });
 });
 
-// si l’hôte quitte le salon, message puis redirect
-connection.on("SessionEnded", () => {
-    alert("L’hôte a quitté le salon !");
+connection.on("Error", (message) => {
+    console.log(message);
+    alert(message);
     document.location.href = "/";
+});
+
+// affichage owner/viewer
+$("#startButton").hide();
+connection.on("IsOwner", () => {
+    $("#startButton").show();
 });
 
 // connexion
@@ -51,7 +57,7 @@ async function main() {
 
     // ajout au groupe/salon
     try {
-        await connection.invoke("AddToGroup", code);
+        await connection.invoke("JoinSession", code);
     } catch (err) {
         console.error(err);
     }
@@ -59,21 +65,24 @@ async function main() {
     // bouton Quitter
     $("#leaveButton").click(async () => {
         if (confirm("Voulez-vous vraiment quitter ?")) {
-            window.onbeforeunload = null;
-            await connection.invoke("Logout", code);
-            await connection.stop();
+            await connection.invoke("LeaveSession", code);
             document.location.href = "/";
         }
     });
 
+    // bouton Commencer
     $("#startButton").click(async () => {
         
     });
 
-    // confirmer avant de quitter
-    window.onbeforeunload = function () {
-        return "";
-    };
+    // bouton Copier
+    $("#copyCode").click(async () => {
+        var code = $("#sessionCode").val();
+        $("#sessionCode").focus();
+        $("#sessionCode").select();
+        navigator.clipboard.writeText(code);
+    });
+
 }
 
 main();

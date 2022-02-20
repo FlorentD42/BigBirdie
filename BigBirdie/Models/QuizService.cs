@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using BigBirdie.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using System.Collections.ObjectModel;
+using System.Timers;
 
 namespace BigBirdie.Models
 {
@@ -7,13 +10,23 @@ namespace BigBirdie.Models
     /// </summary>
     public class QuizService
     {
-        private Dictionary<string, QuizSession> Sessions { get; set; }
+        private readonly IHubContext<QuizHub, IQuizHub> HubContext;
+        private List<QuizSession> Sessions { get; set; }
+        private List<QuizUser> Users { get; set; }
 
-        public QuizService()
+        public QuizService(IHubContext<QuizHub, IQuizHub> hubContext)
         {
-            this.Sessions = new Dictionary<string, QuizSession>();
+            this.HubContext = hubContext;
+            this.Sessions = new List<QuizSession>();
+            this.Users = new List<QuizUser>();
         }
 
+        /// <summary>
+        /// Création d’une session
+        /// </summary>
+        /// <param name="code">Code de la session</param>
+        /// <param name="owner">Nom du créateur</param>
+        /// <returns>true si ajouté avec succès</returns>
         public bool AddSession(string code, string owner)
         {
             if (string.IsNullOrEmpty(code))
@@ -22,93 +35,166 @@ namespace BigBirdie.Models
             if (this.SessionExists(code))
                 return false;
 
-            this.Sessions[code] = new QuizSession(code, owner);
+            this.Sessions.Add(new QuizSession(code, owner));
+
 
             return true;
         }
 
         public bool SessionExists(string code)
         {
-            return this.Sessions.ContainsKey(code);
+            return this.Sessions.Any(session => session.Code == code);
         }
 
-        public bool AddUser(string code, string user)
-        {
-            if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(user))
-                return false;
+        /// <summary>
+        /// Connecte un utilisateur à l’app
+        /// </summary>
+        /// <param name="username">Nom de l’utilisateur</param>
+        public void ConnectUser(string username)
+		{
+            if (!this.Users.Any(user => user.UserName == username))
+                this.Users.Add(new QuizUser(username));
 
-            if (!this.SessionExists(code))
-                return false;
+            QuizUser? user = this.GetUser(username);
+            if (user == null) return;
 
-            return this.Sessions[code].TryAddUser(user);
+            user.StopTimer();
+            user.TimedOut -= UserTimedOut;
         }
 
-        internal QuizSession? GetSession(string code)
+        /// <summary>
+        /// Ajoute un utilisateur à une session
+        /// </summary>
+        /// <param name="code">Code de session</param>
+        /// <param name="username">Nom de l’utilisateur</param>
+        /// <returns>ajout avec succès ou non</returns>
+        public bool AddUserToSession(string code, string username)
         {
-            if (string.IsNullOrEmpty(code))
-                return null;
+            QuizSession? session = this.GetSession(code);
+            QuizUser? user = this.GetUser(username);
 
-            if (!this.SessionExists(code))
-                return null;
+            if (session == null || user == null)
+                return false;
 
-            return this.Sessions[code];
+            bool res = session.TryAddUser(user.UserName);
+
+            // supprime l’utilisateur d’éventuelles autres sessions.
+            string[] codes = this.Sessions
+                .Where(s => s.HasUser(user.UserName) && s.Code != session.Code)
+                .Select(s => s.Code).ToArray();
+            foreach (string otherCode in codes)
+                this.RemoveUserFromSession(otherCode, user.UserName);
+
+            return res;
         }
 
-        public bool IsSessionOwner(string code, string user)
+		private QuizUser? GetUser(string username)
+		{
+            return this.Users.FirstOrDefault(user => user.UserName == username);
+		}
+
+		internal QuizSession? GetSession(string code)
         {
-            if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(user))
+            return this.Sessions.FirstOrDefault(session => session.Code == code);
+        }
+
+        public bool IsSessionOwner(string code, string username)
+        {
+            QuizSession? session = this.GetSession(code);
+
+            if (session == null)
                 return false;
 
-            if (!this.SessionExists(code))
+            QuizUser? user = this.GetUser(username);
+
+            if (user == null)
                 return false;
 
-            return this.Sessions[code].Owner == user;
+            return session.Owner == user.UserName;
         }
 
         public void RemoveSession(string code)
         {
-            this.Sessions.Remove(code);
+            this.Sessions.RemoveAll(session => session.Code == code);
         }
 
-        public bool RemoveUserFromSession(string code, string user)
+        /// <summary>
+        /// Enclenche le timer de time out pour l’utilisateur en cas de perte de connexion
+        /// S’il ne se reconnecte pas d’ici la fin du timer, il est retiré des salons
+        /// </summary>
+        /// <param name="username"></param>
+		public void TimeoutUser(string username)
+		{
+            QuizUser? user = this.GetUser(username);
+
+            if (user == null)
+                return;
+
+            if (!this.Sessions.Any(s => s.HasUser(user.UserName)))
+                return;
+
+            Console.WriteLine("starting timer for " + user.UserName);
+
+            // début du timer
+            user.StartTimer();
+
+            // abonnement au time out du timer
+            user.TimedOut += UserTimedOut;
+        }
+
+        /// <summary>
+        /// Callback du timer de time out de l’utilisateur
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+		private void UserTimedOut(object? sender, EventArgs e)
+		{
+            QuizUser? user = sender as QuizUser;
+
+            if (user == null)
+                return;
+
+            user.TimedOut -= UserTimedOut;
+
+            Console.WriteLine("User " + user.UserName + " timed out.");
+
+			string[] codes = this.Sessions.Where(s => s.HasUser(user.UserName)).Select(s => s.Code).ToArray();
+            foreach (string code in codes)
+                this.RemoveUserFromSession(code, user.UserName);
+        }
+
+        /// <summary>
+        /// Supprime l’utilisateur d’une session. 
+        /// S’il en est le créateur, yeet tous le monde hors de la session.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="username"></param>
+		public void RemoveUserFromSession(string code, string username)
         {
-            if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(user))
-                return false;
+            QuizSession? session = this.GetSession(code);
+            QuizUser? user = this.GetUser(username);
 
-            if (!this.SessionExists(code))
-                return false;
+            if (session == null || user == null)
+                return;
 
-            if (this.Sessions[code].HasUser(user))
-            {
-                this.Sessions[code].RemoveUser(user);
-                return true;
+            if (!session.HasUser(user.UserName))
+                return;
+
+            session.RemoveUser(user.UserName);
+
+            if (session.Owner == user.UserName)
+			{
+                this.RemoveSession(session.Code);
+                this.HubContext.Clients.Group(session.Code).Error("L’hôte n’est plus connecté au salon !");
             }
+            else
+                HubContext.Clients.Group(code).SessionUpdate(session.Serialize());
 
-            return false;
-        }
-
-        public IEnumerable<string> RemoveUser(string username)
-        {
-            List<string> codes = new List<string>();
-
-            foreach (string code in this.Sessions.Keys)
-                if (this.RemoveUserFromSession(code, username))
-                    codes.Add(code);
-
-            return codes;
-        }
-
-        public ReadOnlyCollection<string> GetSessionUsers(string code)
-        {
-            ReadOnlyCollection<string> list = new List<string>().AsReadOnly();
-
-            if (string.IsNullOrEmpty(code))
-                return list;
-
-            if (!this.SessionExists(code))
-                return list;
-
-            return this.Sessions[code].GetUsers();
+            // si l’utilisateur n’est plus dans aucun salon, on le supprime
+            if (!this.Sessions.Any(s => s.HasUser(user.UserName)))
+                this.Users.RemoveAll(u => u.UserName == user.UserName);
+            
+            return;
         }
     }
 }

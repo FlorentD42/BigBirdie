@@ -1,13 +1,12 @@
 ﻿using BigBirdie.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
-using System.Security.Principal;
+using System.Collections.Concurrent;
 
 namespace BigBirdie.Hubs
 {
     [Authorize]
-    public class QuizHub : Hub
+    public class QuizHub : Hub<IQuizHub>
     {
         private readonly QuizService QuizService;
         private string Username => Context.User?.Identity?.Name ?? string.Empty;
@@ -22,17 +21,27 @@ namespace BigBirdie.Hubs
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public async Task AddToGroup(string code)
+        public async Task JoinSession(string code)
         {
-            if(!this.QuizService.SessionExists(code))
+            Console.WriteLine(Username + " joined session " + code);
+            if (!this.QuizService.SessionExists(code))
             {
-                await Clients.Caller.SendAsync("Error", $"Code {code} invalide.");
+                await Clients.Caller.Error("Le salon n’existe pas.");
                 return;
             }
 
+            if (!this.QuizService.AddUserToSession(code, Username))
+			{
+                await Clients.Caller.Error("Impossible de rejoindre le salon.");
+                return;
+			}
+
+            if (this.QuizService.IsSessionOwner(code, Username))
+                await Clients.Caller.IsOwner();
+
             await Groups.AddToGroupAsync(Context.ConnectionId, code);
 
-            await Clients.Group(code).SendAsync("SessionUpdate", this.QuizService.GetSession(code)?.Serialize());
+            await Clients.Group(code).SessionUpdate(this.QuizService.GetSession(code)?.Serialize());
         }
 
         /// <summary>
@@ -40,34 +49,34 @@ namespace BigBirdie.Hubs
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public async Task Logout(string code)
+        public async Task LeaveSession(string code)
         {
+            Console.WriteLine(Username + " logged out");
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, code);
-
-            if (this.QuizService.IsSessionOwner(code, Username))
-            {
-                this.QuizService.RemoveSession(code);
-
-                await Clients.Group(code).SendAsync("SessionEnded");
-            }
-            else
-            {
-                this.QuizService.RemoveUserFromSession(code, Username);
-
-                await Clients.Group(code).SendAsync("SessionUpdate", this.QuizService.GetSession(code)?.Serialize());
-            }
+            this.QuizService.RemoveUserFromSession(code, Username);
         }
 
         /// <summary>
-        /// Déconnexion du Client de tous les salons
+        /// Déconnexion du Client
         /// </summary>
         /// <param name="exception"></param>
         /// <returns></returns>
-        public override async Task OnDisconnectedAsync(Exception? exception)
+        public override Task OnDisconnectedAsync(Exception? exception)
         {
-            IEnumerable<string>? codes = this.QuizService.RemoveUser(Username);
-            foreach(string code in codes)
-                await this.Logout(code);
+            Console.WriteLine(Username + " lost connection");
+            this.QuizService.TimeoutUser(Username);
+            return base.OnDisconnectedAsync(exception);
         }
-    }
+
+        /// <summary>
+        /// Connexion du Client
+        /// </summary>
+        /// <returns></returns>
+        public override Task OnConnectedAsync()
+		{
+            Console.WriteLine(Username + " connected");
+            this.QuizService.ConnectUser(Username);
+			return base.OnConnectedAsync();
+		}
+	}
 }

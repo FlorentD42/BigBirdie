@@ -25,7 +25,7 @@ namespace BigBirdie.Models
             return Users.Contains(user);
         }
 
-        public void AddUser(string user)
+        private void AddUser(string user)
         {
             this.Users.Add(user);
         }

@@ -26,7 +26,7 @@
 
     @if (@Context.User.IsInRole("Admin"))
     {
-    <form class="d-grid gap-2 my-4" asp-action="Create" asp-controller="Quiz">
+    <form class="d-grid gap-2 my-4" asp-action="Join" asp-controller="Quiz" method="post">
         <button type="submit" class="btn main-button">Créer un salon</button>
     </form>
     }

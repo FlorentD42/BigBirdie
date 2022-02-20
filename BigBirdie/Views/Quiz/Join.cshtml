@@ -12,9 +12,20 @@
 	<div class="row gx-4">
 
 		<div class="col">
-			<div class="pink-content">
+			<div class="pink-content container pb-2">
 				<h3 class="text-light">Règles du salon</h3>
-				<p>Aucune c’est la fête on fait ce qu’on veut.</p>
+
+				<div class="row g-2 justify-content-md-center">
+					<div class="col-auto">
+						<label for="sessionCode" class="col col-form-label">Code du salon : </label>
+					</div>
+					<div class="col-auto">
+						<input id="sessionCode" type="text" readonly class="form-control" value="@Model" />
+					</div>
+					<div class="col-auto">
+						<button id="copyCode" class="btn btn-primary">Copier</button>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -31,11 +42,10 @@
 	</div>
 </div>
 
-@if (@Context.User.IsInRole("Admin"))
-{
-<button id="startButton" class="btn main-button mx-2">Commencer</button>
-}
-<button id="leaveButton" class="btn main-button mx-2">Quitter</button>
+<div>
+	<button id="startButton" class="btn main-button mx-2">Commencer</button>
+	<button id="leaveButton" class="btn main-button mx-2">Quitter</button>
+</div>
 
 @section scripts {
 	<script type="text/javascript">
