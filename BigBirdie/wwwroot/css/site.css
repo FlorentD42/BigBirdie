@@ -47,6 +47,7 @@ body {
     border: 5px solid #44b37f !important;
     border-radius: 50px !important;
     box-shadow: 3px 3px #AC4674;
+    background-image: url('/img/BigBirdieBackground.png');
 }
 
 .border-text {
