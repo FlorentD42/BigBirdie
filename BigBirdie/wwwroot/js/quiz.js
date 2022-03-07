@@ -1,5 +1,8 @@
 ﻿"use strict";
 
+$("#lobby").hide();
+$("#question").hide();
+
 // objet HubConnection
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/QuizHub")
@@ -19,6 +22,8 @@ connection.on("SessionUpdate", (sessionJson) => {
         </div>`;
 
     var session = JSON.parse(sessionJson);
+    if (session.State == "LOBBY")
+        $("#lobby").show();
     console.log(session);
     $("#usersDiv").empty();
     $("#onlineSpan").text(`(${session.Users.length}/${session.MaxSize})`);
@@ -28,16 +33,55 @@ connection.on("SessionUpdate", (sessionJson) => {
     });
 });
 
+connection.on("SendQuestion", (questionJson) => {
+    var question = JSON.parse(questionJson);
+    console.log(question);
+    $("#lobby").hide();
+    $("#question").show();
+    $("#question_text").text(question.question);
+    $("#answer_0").text(question.propositions[0]);
+    $("#answer_1").text(question.propositions[1]);
+    $("#answer_2").text(question.propositions[2]);
+    $("#answer_3").text(question.propositions[3]);
+
+    $(".btn-check").prop("checked", false);
+    $("input[type=radio][name=btnradio]").prop("disabled", false);
+    $("label").removeClass("btn-success");
+    $("#continueButton").prop("disabled", true);
+
+    var maxDuration = 10;
+    var duration = maxDuration;
+    var x = setInterval(() => {
+        if (duration <= 0) clearInterval(x);
+        $("#progressbar").width((duration / maxDuration * 100) + "%");
+        duration = duration - 0.1;
+    }, 100);
+});
+
+connection.on("SendAnswer", (answerId) => {
+    $("input[type=radio][name=btnradio]").prop("disabled", true);
+    $("input:radio").removeAttr("checked");
+    $("#continueButton").prop("disabled", false);
+
+    $("#answer_" + answerId).addClass("btn-success");
+});
+
 connection.on("Error", (message) => {
     console.log(message);
     alert(message);
     document.location.href = "/";
 });
 
+connection.on("UpdateTimer", (timeLeft) => {
+
+});
+
 // affichage owner/viewer
 $("#startButton").hide();
+$("#continueButton").hide();
 connection.on("IsOwner", () => {
     $("#startButton").show();
+    $("#continueButton").show();
 });
 
 // connexion
@@ -72,7 +116,11 @@ async function main() {
 
     // bouton Commencer
     $("#startButton").click(async () => {
-        
+        await connection.invoke("StartSession", code);
+    });
+
+    $("#continueButton").click(async () => {
+        await connection.invoke("NextQuestion", code);
     });
 
     // bouton Copier
@@ -81,6 +129,12 @@ async function main() {
         $("#sessionCode").focus();
         $("#sessionCode").select();
         navigator.clipboard.writeText(code);
+    });
+
+    $("input[type=radio][name=btnradio]").change(function () {
+        var answer = $(this).val();
+        if (answer != null)
+            connection.invoke("SendAnswer", code, answer);
     });
 
 }

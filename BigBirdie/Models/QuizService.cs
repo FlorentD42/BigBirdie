@@ -46,11 +46,76 @@ namespace BigBirdie.Models
             return this.Sessions.Any(session => session.Code == code);
         }
 
-        /// <summary>
-        /// Connecte un utilisateur à l’app
-        /// </summary>
-        /// <param name="username">Nom de l’utilisateur</param>
-        public void ConnectUser(string username)
+		public void StartSession(string code, string username)
+		{
+            QuizSession? session = this.GetSession(code);
+            QuizUser? user = this.GetUser(username);
+
+            if (session == null || user == null || !IsSessionOwner(code, username))
+                return;
+
+            this.SendQuestion(session);
+        }
+
+		public void NextQuestion(string code, string username)
+		{
+            QuizSession? session = this.GetSession(code);
+            QuizUser? user = this.GetUser(username);
+
+            if (session == null || user == null || !IsSessionOwner(code, username))
+                return;
+
+            if (session.NextQuestion())
+                this.SendQuestion(session);
+            else
+			{
+                // todo
+			}
+        }
+
+        private void SendQuestion(QuizSession session, bool resend = true)
+		{
+            if (resend)
+            {
+                session.Start();
+                session.TimedOut += QuestionTimeOut;
+            }
+            string question = session.GetQuestionJson();
+
+            this.HubContext.Clients.Group(session.Code).SendQuestion(question);
+        }
+
+		private void QuestionTimeOut(object? sender, EventArgs e)
+		{
+            QuizSession? session = sender as QuizSession;
+
+            if (session == null)
+                return;
+
+            session.TimedOut -= QuestionTimeOut;
+
+            int answer = session.GetAnswer();
+
+            this.HubContext.Clients.Group(session.Code).SendAnswer(answer);
+        }
+
+		public void SendAnswer(string code, string username, int answer)
+		{
+            QuizSession? session = this.GetSession(code);
+            QuizUser? user = this.GetUser(username);
+
+            if (session == null || user == null)
+                return;
+
+            if (session.State == SessionState.QUESTION_RUNNING)
+                user.SetAnswer(session.Code, answer);
+        }
+
+		/// <summary>
+		/// Connecte un utilisateur à l’app
+		/// </summary>
+		/// <param name="username">Nom de l’utilisateur</param>
+		public void ConnectUser(string username)
 		{
             if (!this.Users.Any(user => user.UserName == username))
                 this.Users.Add(new QuizUser(username));

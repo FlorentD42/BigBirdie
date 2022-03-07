@@ -35,7 +35,7 @@ namespace BigBirdie.Hubs
                 await Clients.Caller.Error("Impossible de rejoindre le salon.");
                 return;
 			}
-
+            
             if (this.QuizService.IsSessionOwner(code, Username))
                 await Clients.Caller.IsOwner();
 
@@ -43,6 +43,29 @@ namespace BigBirdie.Hubs
 
             await Clients.Group(code).SessionUpdate(this.QuizService.GetSession(code)?.Serialize());
         }
+
+        public void StartSession(string code)
+		{
+            this.QuizService.StartSession(code, Username);
+		}
+
+        public void SendAnswer(string code, string answer)
+		{
+            try
+            {
+                int ans = Convert.ToInt32(answer);
+                this.QuizService.SendAnswer(code, Username, ans);
+            }
+            catch
+			{
+
+			}
+		}
+
+        public void NextQuestion(string code)
+		{
+            this.QuizService.NextQuestion(code, Username);
+		}
 
         /// <summary>
         /// Déconnexion d’un salon

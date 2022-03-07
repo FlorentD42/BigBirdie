@@ -20,5 +20,25 @@
 		/// Informe à l’utilisateur qu’il est le créateur de ce salon
 		/// </summary>
 		Task IsOwner();
+
+		/// <summary>
+		/// Envoie un énoncé de question aux clients
+		/// </summary>
+		/// <returns></returns>
+		Task SendQuestion(string questionJson);
+
+		/// <summary>
+		/// Envoie l’id de la bonne réponse aux clients
+		/// </summary>
+		/// <param name="answerId"></param>
+		/// <returns></returns>
+		Task SendAnswer(int answerId);
+
+		/// <summary>
+		/// Envoie la valeur restante au timer de question pour mettre la progress bar à jour
+		/// </summary>
+		/// <param name="timeLeft"></param>
+		/// <returns></returns>
+		Task UpdateTimer(double timeLeft);
 	}
 }
