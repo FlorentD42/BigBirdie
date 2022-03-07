@@ -9,8 +9,9 @@ namespace BigBirdie.Models
     public enum SessionState
 	{
         LOBBY,
-        QUESTION_RUNNING,
-        QUESTION_TIMED_OUT
+        QUESTION,
+        ANSWER,
+        SCORE
 	}
 
     /// <summary>
@@ -18,7 +19,8 @@ namespace BigBirdie.Models
     /// </summary>
     public class QuizSession
     {
-        public List<string> Users { get; private set; } = new List<string>();
+        public List<string> Users { get => this.QuizUsers.Select(u => u.UserName).ToList(); }
+        private List<QuizUser> QuizUsers { get; set; } = new List<QuizUser>();
         public string Code { get; private set; }
         public string Owner { get; private set; }
         public int MaxSize { get; private set; }
@@ -61,15 +63,20 @@ namespace BigBirdie.Models
             this.Questions = items.OrderBy(item => random.Next()).Take(this.NumberQuestions).ToList();
         }
 
-        public void Start()
-		{
+		public void InitQuiz()
+        {
             this.QuestionIndex = 0;
+        }
+
+		public void Start()
+		{
             this.Timer.Start();
-            this.State = SessionState.QUESTION_RUNNING;
+            this.State = SessionState.QUESTION;
 		}
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            this.State = SessionState.QUESTION_TIMED_OUT;
+            this.State = SessionState.ANSWER;
+            this.QuizUsers.ForEach(u => u.ValidateAnswer(this.Code, this.GetAnswer()));
             this.TimedOut?.Invoke(this, e);
         }
 
@@ -98,31 +105,26 @@ namespace BigBirdie.Models
             return this.QuestionIndex < this.NumberQuestions;
 		}
 
-		public bool HasUser(string user)
+		public bool HasUser(QuizUser user)
         {
-            return Users.Contains(user);
+            return QuizUsers.Any(u => u.UserName == user.UserName);
         }
 
-        private void AddUser(string user)
+        private void AddUser(QuizUser user)
         {
-            this.Users.Add(user);
+            this.QuizUsers.Add(user);
         }
 
-        public ReadOnlyCollection<string> GetUsers()
+        public void RemoveUser(QuizUser user)
         {
-            return this.Users.AsReadOnly();
+            this.QuizUsers.RemoveAll(u => u.UserName == user.UserName);
         }
 
-        public void RemoveUser(string user)
+        public bool TryAddUser(QuizUser user)
         {
-            this.Users.Remove(user);
-        }
-
-        public bool TryAddUser(string user)
-        {
-            if (this.Users.Contains(user))
+            if (this.QuizUsers.Any(u => u.UserName == user.UserName))
                 return true;
-            if (this.Users.Count >= MaxSize)
+            if (this.QuizUsers.Count >= MaxSize)
                 return false;
             if (this.State != SessionState.LOBBY)
                 return false;

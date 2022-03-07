@@ -22,40 +22,44 @@ connection.on("SessionUpdate", (sessionJson) => {
         </div>`;
 
     var session = JSON.parse(sessionJson);
-    if (session.State == "LOBBY")
-        $("#lobby").show();
     console.log(session);
-    $("#usersDiv").empty();
-    $("#onlineSpan").text(`(${session.Users.length}/${session.MaxSize})`);
-    session.Users.forEach(user => {
-        var style = user == session.Owner ? "owner-card" : "user-card";
-        $("#usersDiv").append([{ user: user, style: style}].map(userTemplate));
-    });
-});
 
-connection.on("SendQuestion", (questionJson) => {
-    var question = JSON.parse(questionJson);
-    console.log(question);
-    $("#lobby").hide();
-    $("#question").show();
-    $("#question_text").text(question.question);
-    $("#answer_0").text(question.propositions[0]);
-    $("#answer_1").text(question.propositions[1]);
-    $("#answer_2").text(question.propositions[2]);
-    $("#answer_3").text(question.propositions[3]);
+    if (session.State == "LOBBY")
+    {
+        $("#lobby").show();
+        $("#usersDiv").empty();
+        $("#onlineSpan").text(`(${session.Users.length}/${session.MaxSize})`);
+        session.Users.forEach(user => {
+            var style = user == session.Owner ? "owner-card" : "user-card";
+            $("#usersDiv").append([{ user: user, style: style }].map(userTemplate));
+        });
+    }
+    else
+    {
+        var question = session.CurrentQuestion;
+        $("#lobby").hide();
+        $("#question").show();
+        $("#question_text").text(question.question);
+        $("#answer_0").text(question.propositions[0]);
+        $("#answer_1").text(question.propositions[1]);
+        $("#answer_2").text(question.propositions[2]);
+        $("#answer_3").text(question.propositions[3]);
 
-    $(".btn-check").prop("checked", false);
-    $("input[type=radio][name=btnradio]").prop("disabled", false);
-    $("label").removeClass("btn-success");
-    $("#continueButton").prop("disabled", true);
+        $(".btn-check").prop("checked", false);
+        $("input[type=radio][name=btnradio]").prop("disabled", false);
+        $("label").removeClass("btn-success");
+        $("#continueButton").prop("disabled", true);
 
-    var maxDuration = 10;
-    var duration = maxDuration;
-    var x = setInterval(() => {
-        if (duration <= 0) clearInterval(x);
-        $("#progressbar").width((duration / maxDuration * 100) + "%");
-        duration = duration - 0.1;
-    }, 100);
+        var maxDuration = 10;
+        var duration = maxDuration;
+        var x = setInterval(() => {
+            if (duration <= 0) clearInterval(x);
+            $("#progressbar").width((duration / maxDuration * 100) + "%");
+            duration = duration - 0.1;
+        }, 100);
+    }
+
+    
 });
 
 connection.on("SendAnswer", (answerId) => {

@@ -10,6 +10,7 @@ namespace BigBirdie.Models
 		public EventHandler? TimedOut;
 		public bool IsOnline { get; set; }
 		private Dictionary<string, int> Answers { get; set; }
+		private Dictionary<string, int> Scores { get; set; }
 
 		public QuizUser(string username)
 		{
@@ -18,6 +19,7 @@ namespace BigBirdie.Models
 			this.Timer.AutoReset = false;
 			this.Timer.Elapsed += Timer_Elapsed;
 			this.Answers = new Dictionary<string, int>();
+			this.Scores = new Dictionary<string, int>();
 		}
 
 		public void StartTimer()
@@ -36,9 +38,24 @@ namespace BigBirdie.Models
 			Timer.Stop();
 		}
 
-		internal void SetAnswer(string code, int answer)
+		public void SetAnswer(string code, int answer)
 		{
 			this.Answers[code] = answer;
+		}
+
+		public void ValidateAnswer(string code, int answer)
+		{
+			if (!this.Scores.ContainsKey(code))
+				this.Scores[code] = 0;
+
+			if (this.Answers.ContainsKey(code) && this.Answers[code] == answer)
+				this.Scores[code]++;
+		}
+
+		internal void RemoveSessions(string code)
+		{
+			this.Scores.Remove(code);
+			this.Answers.Remove(code);
 		}
 	}
 }

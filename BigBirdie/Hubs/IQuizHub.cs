@@ -22,12 +22,6 @@
 		Task IsOwner();
 
 		/// <summary>
-		/// Envoie un énoncé de question aux clients
-		/// </summary>
-		/// <returns></returns>
-		Task SendQuestion(string questionJson);
-
-		/// <summary>
 		/// Envoie l’id de la bonne réponse aux clients
 		/// </summary>
 		/// <param name="answerId"></param>

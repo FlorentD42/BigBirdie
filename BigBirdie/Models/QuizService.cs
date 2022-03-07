@@ -54,6 +54,7 @@ namespace BigBirdie.Models
             if (session == null || user == null || !IsSessionOwner(code, username))
                 return;
 
+            session.InitQuiz();
             this.SendQuestion(session);
         }
 
@@ -69,7 +70,7 @@ namespace BigBirdie.Models
                 this.SendQuestion(session);
             else
 			{
-                // todo
+                // todo afficher les scores
 			}
         }
 
@@ -82,7 +83,7 @@ namespace BigBirdie.Models
             }
             string question = session.GetQuestionJson();
 
-            this.HubContext.Clients.Group(session.Code).SendQuestion(question);
+            this.HubContext.Clients.Group(session.Code).SessionUpdate(session.Serialize());
         }
 
 		private void QuestionTimeOut(object? sender, EventArgs e)
@@ -107,7 +108,7 @@ namespace BigBirdie.Models
             if (session == null || user == null)
                 return;
 
-            if (session.State == SessionState.QUESTION_RUNNING)
+            if (session.State == SessionState.QUESTION)
                 user.SetAnswer(session.Code, answer);
         }
 
@@ -141,11 +142,11 @@ namespace BigBirdie.Models
             if (session == null || user == null)
                 return false;
 
-            bool res = session.TryAddUser(user.UserName);
+            bool res = session.TryAddUser(user);
 
             // supprime l’utilisateur d’éventuelles autres sessions.
             string[] codes = this.Sessions
-                .Where(s => s.HasUser(user.UserName) && s.Code != session.Code)
+                .Where(s => s.HasUser(user) && s.Code != session.Code)
                 .Select(s => s.Code).ToArray();
             foreach (string otherCode in codes)
                 this.RemoveUserFromSession(otherCode, user.UserName);
@@ -195,7 +196,7 @@ namespace BigBirdie.Models
             if (user == null)
                 return;
 
-            if (!this.Sessions.Any(s => s.HasUser(user.UserName)))
+            if (!this.Sessions.Any(s => s.HasUser(user)))
                 return;
 
             Console.WriteLine("starting timer for " + user.UserName);
@@ -223,7 +224,7 @@ namespace BigBirdie.Models
 
             Console.WriteLine("User " + user.UserName + " timed out.");
 
-			string[] codes = this.Sessions.Where(s => s.HasUser(user.UserName)).Select(s => s.Code).ToArray();
+			string[] codes = this.Sessions.Where(s => s.HasUser(user)).Select(s => s.Code).ToArray();
             foreach (string code in codes)
                 this.RemoveUserFromSession(code, user.UserName);
         }
@@ -242,10 +243,11 @@ namespace BigBirdie.Models
             if (session == null || user == null)
                 return;
 
-            if (!session.HasUser(user.UserName))
+            if (!session.HasUser(user))
                 return;
 
-            session.RemoveUser(user.UserName);
+            user.RemoveSessions(session.Code);
+            session.RemoveUser(user);
 
             if (session.Owner == user.UserName)
 			{
@@ -256,7 +258,7 @@ namespace BigBirdie.Models
                 HubContext.Clients.Group(code).SessionUpdate(session.Serialize());
 
             // si l’utilisateur n’est plus dans aucun salon, on le supprime
-            if (!this.Sessions.Any(s => s.HasUser(user.UserName)))
+            if (!this.Sessions.Any(s => s.HasUser(user)))
                 this.Users.RemoveAll(u => u.UserName == user.UserName);
             
             return;
