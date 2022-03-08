@@ -1,0 +1,442 @@
+[
+  {
+    "id": 1,
+    "question": "Quel célèbre dictateur dirigea l’URSS du milieu des années 1920 à 1953 ?",
+    "propositions": [
+      "Molotov",
+      "Trotski",
+      "Staline",
+      "Lénine"
+    ],
+    "réponse": "Staline"
+  },
+  {
+    "id": 2,
+    "question": "Dans quel pays peut-on trouver la Catalogne, l’Andalousie et la Castille ?",
+    "propositions": [
+      "La France",
+      "L’Italie",
+      "L’Espagne",
+      "Le Portugal"
+    ],
+    "réponse": "L’Espagne"
+  },
+  {
+    "id": 3,
+    "question": "Qui a dit : « Le sort en est jeté » (Alea jacta est) ?",
+    "propositions": [
+      "Auguste",
+      "César",
+      "Attila",
+      "Vercingétorix"
+    ],
+    "réponse": "César"
+  },
+  {
+    "id": 4,
+    "question": "Quel cinéaste a réalisé « Parle avec elle » et « Volver » ?",
+    "propositions": [
+      "Woody Allen",
+      "Pedro Almodovar",
+      "Pablo Trapero",
+      "Guillermo del Toro"
+    ],
+    "réponse": "Pedro Almodovar"
+  },
+  {
+    "id": 5,
+    "question": "À qui doit-on la chanson « I Shot the Sheriff » ?",
+    "propositions": [
+      "Bob Marley",
+      "Eric Clapton",
+      "UB40",
+      "Jim Morrison"
+    ],
+    "réponse": "Bob Marley"
+  },
+  {
+    "id": 6,
+    "question": "Quel pays a remporté la coupe du monde de football en 2014 ?",
+    "propositions": [
+      "L’Italie",
+      "L’Argentine",
+      "L’Allemagne",
+      "Le Brésil"
+    ],
+    "réponse": "L’Allemagne"
+  },
+  {
+    "id": 7,
+    "question": "Dans quelle ville italienne l’action de la pièce de Shakespeare « Roméo et Juliette » se situe-t-elle ?",
+    "propositions": [
+      "Rome",
+      "Vérone",
+      "Venise",
+      "Milan"
+    ],
+    "réponse": "Vérone"
+  },
+  {
+    "id": 8,
+    "question": "Par quel mot désigne-t-on une belle-mère cruelle ?",
+    "propositions": [
+      "Une godiche",
+      "Une marâtre",
+      "Une jocrisse",
+      "Une chenapan"
+    ],
+    "réponse": "Une marâtre"
+  },
+  {
+    "id": 9,
+    "question": "Qui était le dieu de la guerre dans la mythologie grecque ?",
+    "propositions": [
+      "Hermès",
+      "Arès",
+      "Mars",
+      "Hadès"
+    ],
+    "réponse": "Arès"
+  },
+  {
+    "id": 10,
+    "question": "Parmi les animaux suivants, lequel peut se déplacer le plus rapidement ?",
+    "propositions": [
+      "Le springbok",
+      "Le mgbobe",
+      "Le léopard",
+      "Le chevreuil"
+    ],
+    "réponse": "Le springbok"
+  },
+  {
+    "id": 11,
+    "question": "Que jette-t-on sur le ring en cas d'abandon durant un match de boxe ?",
+    "propositions": [
+      "Culotte",
+      "Gant",
+      "Éponge",
+      "Protège-dents"
+    ],
+    "réponse": "Éponge"
+  },
+  {
+    "id": 12,
+    "question": "Laquelle de ces professions ne peut-on associer au grand Léonard de Vinci ?",
+    "propositions": [
+      "Peintre",
+      "Sculpteur",
+      "Botaniste",
+      "Auteur dramatique"
+    ],
+    "réponse": "Auteur dramatique"
+  },
+  {
+    "id": 13,
+    "question": "Fils de Laïos et de Jocaste, qui Oedipe a-t-il tué dans la mythologie grecque ?",
+    "propositions": [
+      "Son père",
+      "Sa mère",
+      "Sa fille",
+      "Son fils"
+    ],
+    "réponse": "Son père"
+  },
+  {
+    "id": 14,
+    "question": "À quelle substance naturelle ou synthétique la pénicilline est-elle associée ?",
+    "propositions": [
+      "Antibiotique",
+      "Analgésique",
+      "Soporifique",
+      "Anesthésique"
+    ],
+    "réponse": "Antibiotique"
+  },
+  {
+    "id": 15,
+    "question": "Par quel pays Macao a-t-elle été colonisée et administrée durant plus de 400 ans ?",
+    "propositions": [
+      "Angleterre",
+      "Portugal",
+      "Espagne",
+      "Allemagne"
+    ],
+    "réponse": "Portugal"
+  },
+  {
+    "id": 16,
+    "question": "Dans quel journal est paru le célèbre « J'accuse... ! » d'Émile Zola ?",
+    "propositions": [
+      "Pravda",
+      "Figaro",
+      "Humanité",
+      "Aurore"
+    ],
+    "réponse": "Aurore"
+  },
+  {
+    "id": 17,
+    "question": "Quel roi de France proclama l’Édit de Nantes ?",
+    "propositions": [
+      "Louis XIV",
+      "François Ier",
+      "Henri IV",
+      "Louis XIII"
+    ],
+    "réponse": "Henri IV"
+  },
+  {
+    "id": 18,
+    "question": "À quel écrivain attribue-t-on la rédaction de l’Illiade et l’Odyssée ?",
+    "propositions": [
+      "Virgile",
+      "Homère",
+      "Euripide",
+      "Sophocle"
+    ],
+    "réponse": "Homère"
+  },
+  {
+    "id": 19,
+    "question": "Qui s’est déclaré « premier flic de France » ?",
+    "propositions": [
+      "Léon Blum",
+      "Charles de Gaulle",
+      "Aristide Briand",
+      "Georges Clemenceau"
+    ],
+    "réponse": "Georges Clemenceau"
+  },
+  {
+    "id": 20,
+    "question": "Quel est le plus long fleuve de France selon la partie coulant sur le territoire ?",
+    "propositions": [
+      "Le Rhône",
+      "La Loire",
+      "Le Rhin",
+      "La Seine"
+    ],
+    "réponse": "La Loire"
+  },
+  {
+    "id": 21,
+    "question": "Quel animal andin de la famille des camélidés est élevé pour sa laine ?",
+    "propositions": [
+      "Le lama",
+      "Le yak",
+      "Le chameau",
+      "Le buffle"
+    ],
+    "réponse": "Le lama"
+  },
+  {
+    "id": 22,
+    "question": "Parmi les pays suivants, lequel n’est pas membre de l’Union européenne ?",
+    "propositions": [
+      "La Suède",
+      "La Norvège",
+      "Le Danemark",
+      "La Finlande"
+    ],
+    "réponse": "La Norvège"
+  },
+  {
+    "id": 23,
+    "question": "À quel animal l’adjectif « hippique » se rapporte-t-il ?",
+    "propositions": [
+      "Au chien",
+      "Au canard",
+      "Au cheval",
+      "À l’hippopotame"
+    ],
+    "réponse": "Au cheval"
+  },
+  {
+    "id": 24,
+    "question": "Parmi les films suivants, lequel n’a pas été réalisé par Steven Spielberg ?",
+    "propositions": [
+      "E.T.",
+      "Il faut sauver le soldat Ryan",
+      "Gladiator",
+      "Les Dents de la mer"
+    ],
+    "réponse": "Gladiator"
+  },
+  {
+    "id": 25,
+    "question": "Qui a composé « L’Ode à la joie », hymne de l’Union européenne ?",
+    "propositions": [
+      "Wagner",
+      "Beethoven",
+      "Daft Punk",
+      "Mozart"
+    ],
+    "réponse": "Beethoven"
+  },
+  {
+    "id": 26,
+    "question": "Quel écrivain espagnol est l’auteur de Don Quichotte ?",
+    "propositions": [
+      "Miguel de Cervantes",
+      "Lope de Vega",
+      "Antonio Banderas",
+      "Balthasar Gracián"
+    ],
+    "réponse": "Miguel de Cervantes"
+  },
+  {
+    "id": 27,
+    "question": "Combien de films sur la saga Harry Potter ont été réalisés ?",
+    "propositions": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "réponse": "8"
+  },
+  {
+    "id": 28,
+    "question": "Quel animal peut être marteau, tigre ou pèlerin ?",
+    "propositions": [
+      "La baleine",
+      "Le lama",
+      "Le moustique",
+      "Le requin"
+    ],
+    "réponse": "Le requin"
+  },
+  {
+    "id": 29,
+    "question": "Parmi les marques de voiture suivantes, laquelle n’est pas allemande ?",
+    "propositions": [
+      "Ford",
+      "Audi",
+      "Volkwagen",
+      "Mercedes"
+    ],
+    "réponse": "Ford"
+  },
+  {
+    "id": 30,
+    "question": "Complétez la liste : Athos, Porthos et …",
+    "propositions": [
+      "Arastre",
+      "Aramis",
+      "Bayard",
+      "D’Artagnan"
+    ],
+    "réponse": "Aramis"
+  },
+  {
+    "id": 31,
+    "question": "Quel est le plus petit État du monde ?",
+    "propositions": [
+      "Saint-Marin",
+      "Le Vatican",
+      "Monaco",
+      "Andorre"
+    ],
+    "réponse": "Le Vatican"
+  },
+  {
+    "id": 32,
+    "question": "Qui a dit : « L’histoire de toutes les sociétés jusqu’à nos jours est celle de la lutte des classes. » ?",
+    "propositions": [
+      "Kant",
+      "Marx",
+      "Lénine",
+      "Philippe Poutou"
+    ],
+    "réponse": "Marx"
+  },
+  {
+    "id": 33,
+    "question": "Comment s’appelle le petit du hérisson ?",
+    "propositions": [
+      "Le hérissé",
+      "Le choupisson",
+      "Le feurisson",
+      "Le hérizo"
+    ],
+    "réponse": "Le choupisson"
+  },
+  {
+    "id": 34,
+    "question": "Selon la légende, quel savant grec s’est écrié « Eureka » en prenant son bain ?",
+    "propositions": [
+      "Archimède",
+      "Thalès",
+      "Claude François",
+      "Pythagore"
+    ],
+    "réponse": "Archimède"
+  },
+  {
+    "id": 35,
+    "question": "Que signifie littéralement l’expression « Carpe Diem » ?",
+    "propositions": [
+      "Cueille le jour",
+      "You Only Live Once",
+      "Muet comme une carpe",
+      "Travaille dur"
+    ],
+    "réponse": "Cueille le jour"
+  },
+  {
+    "id": 36,
+    "question": "Quel personnage chante avec Mowgli : « Il en faut peu pour être heureux » ?",
+    "propositions": [
+      "Horty",
+      "Figaro",
+      "Balou",
+      "Bagheera"
+    ],
+    "réponse": "Balou"
+  },
+  {
+    "id": 37,
+    "question": "Quelle est la capitale du Maroc ?",
+    "propositions": [
+      "Rabat",
+      "Tanger",
+      "Casablanca",
+      "Marrakech"
+    ],
+    "réponse": "Rabat"
+  },
+  {
+    "id": 38,
+    "question": "Dans quelle région le Mont-Saint-Michel se situe-t-il ?",
+    "propositions": [
+      "Normandie",
+      "Alsace",
+      "Bretagne",
+      "Manche"
+    ],
+    "réponse": "Normandie"
+  },
+  {
+    "id": 39,
+    "question": "Quel est le nom du mâle né du croisement d’un âne et d’une jument ?",
+    "propositions": [
+      "Une bourrique",
+      "Un zébrule",
+      "Un mulet",
+      "Gérald"
+    ],
+    "réponse": "Un mulet"
+  },
+  {
+    "id": 40,
+    "question": "Quel chanteur britannique interprète « Let’s dance » en 1983 ?",
+    "propositions": [
+      "Prince",
+      "David Bowie",
+      "Freddy Mercury",
+      "Lou Reed"
+    ],
+    "réponse": "David Bowie"
+  }
+]

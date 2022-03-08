@@ -30,7 +30,9 @@ namespace BigBirdie.Models
         private int QuestionIndex { get; set; }
         public int QuestionTimer { get; private set; }
         private Timer Timer { get; set; }
+        private int TimerCounter;
         public EventHandler? TimedOut;
+        public EventHandler? UpdateTimer;
         public SessionState State { get; private set; }
 
         public QuizSession(string code, string owner)
@@ -40,10 +42,10 @@ namespace BigBirdie.Models
             this.MaxSize = 20;
             this.Questions = new List<QuizItem>();
             this.QuestionIndex = -1;
-            this.NumberQuestions = 3;
+            this.NumberQuestions = 10;
             this.QuestionTimer = 10;
-            this.Timer = new Timer(this.QuestionTimer * 1000);
-            this.Timer.AutoReset = false;
+            this.Timer = new Timer(100);
+            //this.Timer.AutoReset = false;
             this.Timer.Elapsed += Timer_Elapsed;
             this.State = SessionState.LOBBY;
             this.LoadQuiz();
@@ -51,7 +53,7 @@ namespace BigBirdie.Models
 
 		private void LoadQuiz()
 		{
-            string filepath = @"Resources/quiz.json";
+            string filepath = @"Resources/quiz-easy.json";
             Utf8JsonReader reader = new Utf8JsonReader(File.ReadAllBytes(filepath));
 
             List<QuizItem> items = JsonSerializer.Deserialize<List<QuizItem>>(ref reader)!;
@@ -66,6 +68,7 @@ namespace BigBirdie.Models
 		public void InitQuiz()
         {
             this.QuestionIndex = 0;
+            this.TimerCounter = 0;
         }
 
 		public void Start()
@@ -75,9 +78,22 @@ namespace BigBirdie.Models
 		}
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            this.State = SessionState.ANSWER;
-            this.QuizUsers.ForEach(u => u.ValidateAnswer(this.Code, this.GetAnswer()));
-            this.TimedOut?.Invoke(this, e);
+            this.TimerCounter++;
+            if (this.TimerCounter == this.QuestionTimer * 10)
+            {
+                this.Timer.Stop();
+                this.State = SessionState.ANSWER;
+                this.QuizUsers.ForEach(u => u.ValidateAnswer(this.Code, this.GetAnswer()));
+                this.TimedOut?.Invoke(this, e);
+                this.TimerCounter = 0;
+            }
+                
+            this.UpdateTimer?.Invoke(this, e);
+        }
+
+        public double GetTimeLeft()
+        {
+            return this.QuestionTimer - this.TimerCounter / 10.0;
         }
 
         private QuizItem? GetQuestion()

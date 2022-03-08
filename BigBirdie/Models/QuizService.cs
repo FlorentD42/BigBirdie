@@ -70,24 +70,32 @@ namespace BigBirdie.Models
                 this.SendQuestion(session);
             else
 			{
-                // todo afficher les scores
                 this.HubContext.Clients.Group(session.Code).SessionUpdate(session.Serialize());
             }
         }
 
-        private void SendQuestion(QuizSession session, bool resend = true)
+        private void SendQuestion(QuizSession session)
 		{
-            if (resend)
-            {
-                session.Start();
-                session.TimedOut += QuestionTimeOut;
-            }
+            session.Start();
+            session.TimedOut += QuestionTimeOut;
+            session.UpdateTimer += UpdateTimer;
+
             string question = session.GetQuestionJson();
 
             this.HubContext.Clients.Group(session.Code).SessionUpdate(session.Serialize());
         }
 
-		private void QuestionTimeOut(object? sender, EventArgs e)
+        private void UpdateTimer(object? sender, EventArgs e)
+        {
+            QuizSession? session = sender as QuizSession;
+
+            if (session == null)
+                return;
+
+            this.HubContext.Clients.Group(session.Code).UpdateTimer(session.GetTimeLeft());
+        }
+
+        private void QuestionTimeOut(object? sender, EventArgs e)
 		{
             QuizSession? session = sender as QuizSession;
 
@@ -95,6 +103,7 @@ namespace BigBirdie.Models
                 return;
 
             session.TimedOut -= QuestionTimeOut;
+            session.UpdateTimer -= UpdateTimer;
 
             int answer = session.GetAnswer();
 

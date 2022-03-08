@@ -3,17 +3,12 @@
 // variable globales
 var quiz_state;
 var question_id = -1;
-var time_left;
 var max_time;
 
 const userTemplate = ({ user, style }) => `
     <div class="col">
 	    <p class="p-2 ${style}">${user}</p>
     </div>`;
-
-$("#lobby").hide();
-$("#question").hide();
-$("#scores").hide();
 
 // objet HubConnection
 const connection = new signalR.HubConnectionBuilder()
@@ -26,7 +21,7 @@ connection.onclose(async () => {
     await start();
 });
 
-// à chaque nouvelle connexion/déco, mettre à jour le lobby
+// update la session (joueurs, questions, scores)
 connection.on("SessionUpdate", (sessionJson) => {
     var session = JSON.parse(sessionJson);
     console.log(session);
@@ -41,7 +36,6 @@ connection.on("SessionUpdate", (sessionJson) => {
         $("#usersDiv").empty();
         $("#onlineSpan").text(`(${session.Users.length}/${session.MaxSize})`);
 
-        var tplt = $("#onlineTemplate");
         session.Users.forEach(user => {
             var style = user.Name == session.Owner ? "owner-card" : "user-card";
             $("#usersDiv").append([{ user: user.Name, style: style }].map(userTemplate));
@@ -72,12 +66,6 @@ connection.on("SessionUpdate", (sessionJson) => {
         $("#continueButton").prop("disabled", true);
 
         max_time = session.QuestionTimer;
-        time_left = max_time;
-        var x = setInterval(() => {
-            if (time_left <= 0) clearInterval(x);
-            SetProgressBar((time_left / max_time * 100));
-            time_left = time_left - 0.1;
-        }, 100);
     }
     else if (session.State == "SCORE") {
         $("#lobby").hide();
@@ -92,7 +80,7 @@ connection.on("SessionUpdate", (sessionJson) => {
         var pos = 1;
         var lastScore = 0;
         session.Users.forEach(user => {
-            $("#scoreboard").append("<div>#" + pos + " " + user.Name + " (" + user.Score + ")" + "</div>");
+            $("#scoreboard").append("<div>#" + pos + " " + user.Name + " (" + user.Score + "/" + session.NumberQuestions+ ")" + "</div>");
             if (user.Score != lastScore)
                 pos++;
             lastScore = user.Score;
@@ -105,6 +93,8 @@ connection.on("SendAnswer", (answerId) => {
     $("input:radio").removeAttr("checked");
     $("#continueButton").prop("disabled", false);
 
+    SetProgressBar(100);
+
     $("#answer_" + answerId).addClass("btn-success");
     quiz_state = "ANSWER";
 });
@@ -115,8 +105,8 @@ connection.on("Error", (message) => {
     document.location.href = "/";
 });
 
-connection.on("UpdateTimer", (timeLeft) => {
-
+connection.on("UpdateTimer", (time_left) => {
+    SetProgressBar((time_left / max_time * 100));
 });
 
 // affichage owner/viewer
