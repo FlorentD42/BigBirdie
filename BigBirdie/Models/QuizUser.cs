@@ -22,7 +22,12 @@ namespace BigBirdie.Models
 			this.Scores = new Dictionary<string, int>();
 		}
 
-		public void StartTimer()
+        public int GetScore(string code)
+        {
+			return this.Scores.ContainsKey(code) ? this.Scores[code] : 0;
+        }
+
+        public void StartTimer()
 		{
 			this.Timer.Stop();
 			this.Timer.Start();
@@ -50,9 +55,16 @@ namespace BigBirdie.Models
 
 			if (this.Answers.ContainsKey(code) && this.Answers[code] == answer)
 				this.Scores[code]++;
+
+			this.Answers[code] = -1;
 		}
 
-		internal void RemoveSessions(string code)
+		public void AddSession(string code)
+        {
+			this.Scores[code] = 0;
+			this.Answers[code] = -1;
+        }
+		public void RemoveSessions(string code)
 		{
 			this.Scores.Remove(code);
 			this.Answers.Remove(code);

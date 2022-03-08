@@ -1,7 +1,19 @@
 ﻿"use strict";
 
+// variable globales
+var quiz_state;
+var question_id = -1;
+var time_left;
+var max_time;
+
+const userTemplate = ({ user, style }) => `
+    <div class="col">
+	    <p class="p-2 ${style}">${user}</p>
+    </div>`;
+
 $("#lobby").hide();
 $("#question").hide();
+$("#scores").hide();
 
 // objet HubConnection
 const connection = new signalR.HubConnectionBuilder()
@@ -16,29 +28,38 @@ connection.onclose(async () => {
 
 // à chaque nouvelle connexion/déco, mettre à jour le lobby
 connection.on("SessionUpdate", (sessionJson) => {
-    const userTemplate = ({ user, style }) => `
-        <div class="col">
-	        <div class="p-2 ${style}">${user}</div>
-        </div>`;
-
     var session = JSON.parse(sessionJson);
     console.log(session);
 
-    if (session.State == "LOBBY")
-    {
+    if (session.State == "LOBBY") {
         $("#lobby").show();
+        $("#question").hide();
+        $("#scores").hide();
+
+        quiz_state = session.State;
+
         $("#usersDiv").empty();
         $("#onlineSpan").text(`(${session.Users.length}/${session.MaxSize})`);
+
+        var tplt = $("#onlineTemplate");
         session.Users.forEach(user => {
-            var style = user == session.Owner ? "owner-card" : "user-card";
-            $("#usersDiv").append([{ user: user, style: style }].map(userTemplate));
+            var style = user.Name == session.Owner ? "owner-card" : "user-card";
+            $("#usersDiv").append([{ user: user.Name, style: style }].map(userTemplate));
         });
     }
-    else
-    {
-        var question = session.CurrentQuestion;
+    else if (session.State == "QUESTION") {
         $("#lobby").hide();
         $("#question").show();
+        $("#scores").hide();
+
+        quiz_state = session.State;
+        var question = session.CurrentQuestion;
+
+        if (question.id == question_id)
+            return;
+        question_id = question.id;
+
+
         $("#question_text").text(question.question);
         $("#answer_0").text(question.propositions[0]);
         $("#answer_1").text(question.propositions[1]);
@@ -50,16 +71,33 @@ connection.on("SessionUpdate", (sessionJson) => {
         $("label").removeClass("btn-success");
         $("#continueButton").prop("disabled", true);
 
-        var maxDuration = 10;
-        var duration = maxDuration;
+        max_time = session.QuestionTimer;
+        time_left = max_time;
         var x = setInterval(() => {
-            if (duration <= 0) clearInterval(x);
-            $("#progressbar").width((duration / maxDuration * 100) + "%");
-            duration = duration - 0.1;
+            if (time_left <= 0) clearInterval(x);
+            SetProgressBar((time_left / max_time * 100));
+            time_left = time_left - 0.1;
         }, 100);
     }
+    else if (session.State == "SCORE") {
+        $("#lobby").hide();
+        $("#question").hide();
+        $("#scores").show();
 
-    
+        if (quiz_state == session.State)
+            return; // ne pas refresh
+        quiz_state = session.State;
+
+        $("#scoreboard").empty();
+        var pos = 1;
+        var lastScore = 0;
+        session.Users.forEach(user => {
+            $("#scoreboard").append("<div>#" + pos + " " + user.Name + " (" + user.Score + ")" + "</div>");
+            if (user.Score != lastScore)
+                pos++;
+            lastScore = user.Score;
+        });
+    }
 });
 
 connection.on("SendAnswer", (answerId) => {
@@ -68,6 +106,7 @@ connection.on("SendAnswer", (answerId) => {
     $("#continueButton").prop("disabled", false);
 
     $("#answer_" + answerId).addClass("btn-success");
+    quiz_state = "ANSWER";
 });
 
 connection.on("Error", (message) => {
@@ -87,6 +126,10 @@ connection.on("IsOwner", () => {
     $("#startButton").show();
     $("#continueButton").show();
 });
+
+function SetProgressBar(percent) {
+    $("#progressbar").width(percent + "%");
+}
 
 // connexion
 async function start() {
@@ -110,12 +153,16 @@ async function main() {
         console.error(err);
     }
 
-    // bouton Quitter
+    // boutons Quitter
     $("#leaveButton").click(async () => {
         if (confirm("Voulez-vous vraiment quitter ?")) {
             await connection.invoke("LeaveSession", code);
             document.location.href = "/";
         }
+    });
+    $("#leaveButton2").click(async () => {
+        await connection.invoke("LeaveSession", code);
+        document.location.href = "/";
     });
 
     // bouton Commencer
@@ -142,5 +189,6 @@ async function main() {
     });
 
 }
+
 
 main();

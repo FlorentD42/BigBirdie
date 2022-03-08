@@ -71,7 +71,8 @@ namespace BigBirdie.Models
             else
 			{
                 // todo afficher les scores
-			}
+                this.HubContext.Clients.Group(session.Code).SessionUpdate(session.Serialize());
+            }
         }
 
         private void SendQuestion(QuizSession session, bool resend = true)

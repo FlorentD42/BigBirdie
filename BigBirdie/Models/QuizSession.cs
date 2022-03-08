@@ -19,7 +19,7 @@ namespace BigBirdie.Models
     /// </summary>
     public class QuizSession
     {
-        public List<string> Users { get => this.QuizUsers.Select(u => u.UserName).ToList(); }
+        public List<object> Users => this.GetUsers();
         private List<QuizUser> QuizUsers { get; set; } = new List<QuizUser>();
         public string Code { get; private set; }
         public string Owner { get; private set; }
@@ -102,7 +102,10 @@ namespace BigBirdie.Models
         public bool NextQuestion()
 		{
             this.QuestionIndex++;
-            return this.QuestionIndex < this.NumberQuestions;
+            bool res = this.QuestionIndex < this.NumberQuestions;
+            if (!res)
+                this.State = SessionState.SCORE;
+            return res;
 		}
 
 		public bool HasUser(QuizUser user)
@@ -112,7 +115,17 @@ namespace BigBirdie.Models
 
         private void AddUser(QuizUser user)
         {
+            user.AddSession(this.Code);
             this.QuizUsers.Add(user);
+        }
+
+        private List<object> GetUsers()
+        {
+            //this.QuizUsers.Select(u => new { Name = u.UserName, Score = this.State == SessionState.SCORE ? u.GetScore(this.Code) : -1}).ToList<object>(); 
+            return this.QuizUsers
+                .Select(u => new { Name = u.UserName, Score = this.State == SessionState.SCORE ? u.GetScore(this.Code) : -1 })
+                .OrderByDescending(u => u.Score)
+                .ToList<object>();
         }
 
         public void RemoveUser(QuizUser user)
