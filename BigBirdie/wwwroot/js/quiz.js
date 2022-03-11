@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 // variable globales
-var quiz_state;
-var question_id = -1;
-var max_time;
+var quizState;
+var questionId = -1;
+var maxTime;
 
 const userTemplate = ({ user, style }) => `
     <div class="col">
@@ -31,7 +31,7 @@ connection.on("SessionUpdate", (sessionJson) => {
         $("#question").hide();
         $("#scores").hide();
 
-        quiz_state = session.State;
+        quizState = session.State;
 
         $("#usersDiv").empty();
         $("#onlineSpan").text(`(${session.Users.length}/${session.MaxSize})`);
@@ -46,13 +46,12 @@ connection.on("SessionUpdate", (sessionJson) => {
         $("#question").show();
         $("#scores").hide();
 
-        quiz_state = session.State;
+        quizState = session.State;
         var question = session.CurrentQuestion;
 
-        if (question.id == question_id)
+        if (question.id == questionId)
             return;
-        question_id = question.id;
-
+        questionId = question.id;
 
         $("#question_text").text(question.question);
         $("#answer_0").text(question.propositions[0]);
@@ -65,22 +64,22 @@ connection.on("SessionUpdate", (sessionJson) => {
         $("label").removeClass("btn-success");
         $("#continueButton").prop("disabled", true);
 
-        max_time = session.QuestionTimer;
+        maxTime = session.QuestionTimer;
     }
     else if (session.State == "SCORE") {
         $("#lobby").hide();
         $("#question").hide();
         $("#scores").show();
 
-        if (quiz_state == session.State)
+        if (quizState == session.State)
             return; // ne pas refresh
-        quiz_state = session.State;
+        quizState = session.State;
 
         $("#scoreboard").empty();
         var pos = 1;
         var lastScore = 0;
         session.Users.forEach(user => {
-            $("#scoreboard").append("<div>#" + pos + " " + user.Name + " (" + user.Score + "/" + session.NumberQuestions+ ")" + "</div>");
+            $("#scoreboard").append("<div>#" + pos + " " + user.Name + " (" + user.Score + "/" + session.NumberQuestions + ")" + "</div>");
             if (user.Score != lastScore)
                 pos++;
             lastScore = user.Score;
@@ -88,36 +87,37 @@ connection.on("SessionUpdate", (sessionJson) => {
     }
 });
 
+// réception de l’id de la réponse à la question courante
 connection.on("SendAnswer", (answerId) => {
     $("input[type=radio][name=btnradio]").prop("disabled", true);
     $("input:radio").removeAttr("checked");
     $("#continueButton").prop("disabled", false);
 
-    SetProgressBar(100);
+    setProgressBar(0);
 
     $("#answer_" + answerId).addClass("btn-success");
-    quiz_state = "ANSWER";
+    quizState = "ANSWER";
 });
 
+// en cas d’erreur : alert puis redirect
 connection.on("Error", (message) => {
     console.log(message);
     alert(message);
     document.location.href = "/";
 });
 
-connection.on("UpdateTimer", (time_left) => {
-    SetProgressBar((time_left / max_time * 100));
+// met à jour la progress bar via le serveur
+connection.on("UpdateTimer", (timeLeft) => {
+    setProgressBar((timeLeft / maxTime * 100));
 });
 
 // affichage owner/viewer
-$("#startButton").hide();
-$("#continueButton").hide();
 connection.on("IsOwner", () => {
     $("#startButton").show();
     $("#continueButton").show();
 });
 
-function SetProgressBar(percent) {
+function setProgressBar(percent) {
     $("#progressbar").width(percent + "%");
 }
 
@@ -172,10 +172,18 @@ async function main() {
         navigator.clipboard.writeText(code);
     });
 
+    // choix d’une réponse
     $("input[type=radio][name=btnradio]").change(function () {
         var answer = $(this).val();
         if (answer != null)
             connection.invoke("SendAnswer", code, answer);
+    });
+
+    // changement dans les règles du salon
+    $(".rule-select").change(function () {
+        $(".rule-select option:selected").each(function () {
+            console.log($(this).text());
+        });
     });
 
 }

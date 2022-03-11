@@ -45,7 +45,6 @@ namespace BigBirdie.Models
             this.NumberQuestions = 10;
             this.QuestionTimer = 10;
             this.Timer = new Timer(100);
-            //this.Timer.AutoReset = false;
             this.Timer.Elapsed += Timer_Elapsed;
             this.State = SessionState.LOBBY;
             this.LoadQuiz();
@@ -71,11 +70,18 @@ namespace BigBirdie.Models
             this.TimerCounter = 0;
         }
 
+        /// <summary>
+        /// début d’une question, démarre le timer
+        /// </summary>
 		public void Start()
 		{
             this.Timer.Start();
             this.State = SessionState.QUESTION;
 		}
+
+        /// <summary>
+        /// Callback du timer de question, appelé tous les 100ms 
+        /// </summary>
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             this.TimerCounter++;
@@ -91,23 +97,25 @@ namespace BigBirdie.Models
             this.UpdateTimer?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Retourne le temps restant en secondes pour la question actuelle
+        /// </summary>
         public double GetTimeLeft()
         {
-            return this.QuestionTimer - this.TimerCounter / 10.0;
+            return Math.Round(this.QuestionTimer - this.TimerCounter / 10.0, 2);
         }
 
+        /// <summary>
+        /// Retourne la question actuelle ou null
+        /// </summary>
         private QuizItem? GetQuestion()
 		{
             return this.Questions.ElementAtOrDefault(this.QuestionIndex);
 		}
 
-        public string GetQuestionJson()
-		{
-            QuizItem? question = this.GetQuestion();
-            if (question == null) return string.Empty;
-            return question.GetPublicJson();
-		}
-
+        /// <summary>
+        /// Retourne l’index de la réponse
+        /// </summary>
         public int GetAnswer()
 		{
             QuizItem? question = this.GetQuestion();
@@ -115,6 +123,10 @@ namespace BigBirdie.Models
             return question.Propositions.IndexOf(question.Reponse!);
         }
 
+        /// <summary>
+        /// Passe à la question suivante
+        /// </summary>
+        /// <returns>false si fin du questionnaire</returns>
         public bool NextQuestion()
 		{
             this.QuestionIndex++;
@@ -137,7 +149,6 @@ namespace BigBirdie.Models
 
         private List<object> GetUsers()
         {
-            //this.QuizUsers.Select(u => new { Name = u.UserName, Score = this.State == SessionState.SCORE ? u.GetScore(this.Code) : -1}).ToList<object>(); 
             return this.QuizUsers
                 .Select(u => new { Name = u.UserName, Score = this.State == SessionState.SCORE ? u.GetScore(this.Code) : -1 })
                 .OrderByDescending(u => u.Score)

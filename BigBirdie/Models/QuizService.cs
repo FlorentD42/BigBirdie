@@ -80,8 +80,6 @@ namespace BigBirdie.Models
             session.TimedOut += QuestionTimeOut;
             session.UpdateTimer += UpdateTimer;
 
-            string question = session.GetQuestionJson();
-
             this.HubContext.Clients.Group(session.Code).SessionUpdate(session.Serialize());
         }
 

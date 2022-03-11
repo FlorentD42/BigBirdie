@@ -4,7 +4,7 @@
     ViewData["Title"] = "Lobby";
 }
 
-<img class="d-block mx-auto mb-4 img-fluid" src="/img/Logo.png">
+<img class="d-block mx-auto mb-4 img-fluid" src="/img/Logo.png" alt="logo">
 
 <div id="lobby" style="display: none;">
 
@@ -19,6 +19,7 @@
 
 					<div class="container">
 						<div class="row g-2">
+
 							<!-- code -->
 							<div class="col-6 text-end">
 								<label for="sessionCode" class="col col-form-label">Code du salon : </label>
@@ -35,7 +36,7 @@
 								<label for="sessionSize" class="col col-form-label">Taille du salon : </label>
 							</div>
 							<div class="col-6">
-								<select id="sessionSize" class="form-select">
+								<select id="sessionSize" class="form-select rule-select">
 									<option>5</option>
 									<option>10</option>
 									<option selected>20</option>
@@ -50,7 +51,7 @@
 								<label for="nbQuestions" class="col col-form-label">Nombre de questions : </label>
 							</div>
 							<div class="col-6">
-								<select id="nbQuestions" class="form-select">
+								<select id="nbQuestions" class="form-select rule-select">
 									<option>3</option>
 									<option>5</option>
 									<option selected>10</option>
@@ -65,7 +66,7 @@
 								<label for="questionTimer" class="col col-form-label">Temps de réponse : </label>
 							</div>
 							<div class="col-6">
-								<select id="questionTimer" class="form-select">
+								<select id="questionTimer" class="form-select rule-select">
 									<option>5</option>
 									<option selected>10</option>
 									<option>15</option>
@@ -99,7 +100,7 @@
 	</div>
 
 	<div>
-		<button id="startButton" class="btn main-button mx-2">Commencer</button>
+		<button id="startButton" class="btn main-button mx-2" style="display: none;">Commencer</button>
 		<button id="leaveButton" class="btn main-button mx-2">Quitter</button>
 	</div>
 </div>
@@ -156,7 +157,7 @@
 		</div>
 	</div>
 
-	<button id="continueButton" class="btn main-button mt-4">Continuer</button>
+	<button id="continueButton" class="btn main-button mt-4" style="display: none;">Continuer</button>
 </div>
 
 <div id="scores" class="mx-lg-5" style="display: none;"> 
@@ -165,7 +166,7 @@
 			<h2 class="pink-content h2-title m-3">Scores</h2>
 
 			<div id="scoreboard" class="pink-content m-3">
-
+				<!-- Généré par quiz.js -->
 			</div>
 		</div>
 	</div>

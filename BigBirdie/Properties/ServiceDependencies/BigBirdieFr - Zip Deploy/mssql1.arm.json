@@ -7,7 +7,7 @@
       "defaultValue": "BigBirdieResourceGroup",
       "metadata": {
         "_parameterType": "resourceGroup",
-        "description": "Nom du groupe de ressources de la ressource. Il est recommandé de placer les ressources sous le même groupe de ressources pour un meilleur suivi."
+        "description": "Name of the resource group for the resource. It is recommended to put resources under same resource group for better tracking."
       }
     },
     "resourceGroupLocation": {
@@ -15,7 +15,7 @@
       "defaultValue": "francecentral",
       "metadata": {
         "_parameterType": "location",
-        "description": "Emplacement du groupe de ressources. Les groupes de ressources peuvent avoir un emplacement différent de celui des ressources."
+        "description": "Location of the resource group. Resource groups could have different location than resources."
       }
     },
     "resourceLocation": {
@@ -23,7 +23,7 @@
       "defaultValue": "[parameters('resourceGroupLocation')]",
       "metadata": {
         "_parameterType": "location",
-        "description": "Emplacement de la ressource. Par défaut, utilisez l'emplacement du groupe de ressources, sauf s'il ne prend pas en charge le fournisseur de ressources."
+        "description": "Location of the resource. By default use resource group's location, unless the resource provider is not supported there."
       }
     }
   },
