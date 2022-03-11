@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "../lib/bootstrap/scss/bootstrap";
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: #2C144D;
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+.twitch-button {
+    background-color: #9146FF;
+    color: #fff;
+    font-weight: 500;
+    font-size: 25px;
+    box-shadow: 3px 3px #6441a5;
+}
+
+.btn-label {
+    position: relative;
+    left: -12px;
+    display: inline-block;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px 0 0 3px;
+}
+
+.btn-labeled {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.border-main {
+    border: 5px solid #44b37f !important;
+    border-radius: 50px !important;
+    box-shadow: 3px 3px #AC4674;
+    background-image: url('/img/BigBirdieBackground.png');
+}
+
+.border-text {
+    background: #43A882;
+    border: 5px solid #A50E52;
+    border-radius: 10px;
+}
+.btn-question {
+    background: #AC4674;
+    box-shadow: 3px 7px 0px 3px #A50E52;
+    color: #fff;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    border: none;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 33px;
+    text-align: center;
+}
+
+.btn-success {
+    background: #44B37F !important;
+    box-shadow: 3px 5px 0px 3px #047E4F !important;
+}
+
+.btn-check:checked + .btn-question {
+    background-color: #A50E52;
+}
+
+.btn-check:hover + .btn-question {
+    background-color: #A50E52;
+    color: white;
+}
+
+.btn-check:disabled + .btn-question {
+    opacity: 1;
+}
+
+.btn-check:focus + .btn-question, .btn-check:checked + .btn-question {
+    box-shadow: 3px 3px 0px 3px #610a31;
+    transform: translateY(4px);
+}
+
+.question-title {
+    background: #43A882;
+    border: 5px solid #A50E52;
+    border-radius: 10px;
+    min-height: 110px;
+    position:relative;
+    align-items: center;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 40px;
+    text-align: center;
+    color: #FFFFFF;
+    text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.25);
+}
+
+.main-button {
+    background: #44B37F;
+    box-shadow: 3px 5px 0px 3px #047E4F;
+    border-radius: 10px;
+
+    font-style: normal;
+    font-weight: bold;
+    font-size: 42px;
+    line-height: 48px;
+
+    text-align: center;
+    color: #FFFFFF;
+    text-shadow: 2px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.code-input {
+    border: 5px solid #A50E52;
+}
+
+.h2-title {
+    text-shadow: 2px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.pink-content {
+    color: white;
+    background: #AC4674;
+    box-shadow: 3px 5px 0px 3px #A50E52;
+    border-radius: 10px;
+}
+
+.user-card {
+    background: #44B37F;
+    border-radius: 5px;
+}
+
+.owner-card {
+    background: #047E4F;
+    font-weight: bold;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}
+
+.progress {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    background-color: #44B37F;
+    border-radius: 0 0 0.25rem 0.25rem;
+}
+.progress-bar {
+    background-color: #047e4f;
+}
