@@ -58,6 +58,20 @@ namespace BigBirdie.Models
             this.SendQuestion(session);
         }
 
+		public void ApplySettings(string code, SessionSettings settings)
+		{
+            QuizSession? session = this.GetSession(code);
+
+            if (session == null)
+                return;
+
+            session.MaxSize = settings.SessionSize;
+            session.NumberQuestions = settings.NbQuestions;
+            session.QuestionTimer = settings.QuestionTimer;
+
+            this.HubContext.Clients.Group(session.Code).SessionUpdate(session.Serialize());
+        }
+
 		public void NextQuestion(string code, string username)
 		{
             QuizSession? session = this.GetSession(code);

@@ -23,12 +23,12 @@ namespace BigBirdie.Models
         private List<QuizUser> QuizUsers { get; set; } = new List<QuizUser>();
         public string Code { get; private set; }
         public string Owner { get; private set; }
-        public int MaxSize { get; private set; }
-        public int NumberQuestions { get; private set; }
+        public int MaxSize { get; set; }
+        public int NumberQuestions { get; set; }
         private List<QuizItem> Questions { get; set; }
         public QuizItem? CurrentQuestion { get => Questions.ElementAtOrDefault(QuestionIndex); }
         private int QuestionIndex { get; set; }
-        public int QuestionTimer { get; private set; }
+        public int QuestionTimer { get; set; }
         private Timer Timer { get; set; }
         private int TimerCounter;
         public EventHandler? TimedOut;
@@ -47,9 +47,11 @@ namespace BigBirdie.Models
             this.Timer = new Timer(100);
             this.Timer.Elapsed += Timer_Elapsed;
             this.State = SessionState.LOBBY;
-            this.LoadQuiz();
         }
 
+        /// <summary>
+        /// Charge le fichier de Quiz pour la session
+        /// </summary>
 		private void LoadQuiz()
 		{
             string filepath = @"Resources/quiz-easy.json";
@@ -66,6 +68,7 @@ namespace BigBirdie.Models
 
 		public void InitQuiz()
         {
+            this.LoadQuiz();
             this.QuestionIndex = 0;
             this.TimerCounter = 0;
         }
@@ -136,17 +139,28 @@ namespace BigBirdie.Models
             return res;
 		}
 
+        /// <summary>
+        /// Renvoie true si "user" est présent dans la session
+        /// </summary>
 		public bool HasUser(QuizUser user)
         {
             return QuizUsers.Any(u => u.UserName == user.UserName);
         }
 
+        /// <summary>
+        /// Ajoute un utilisateur à la session
+        /// </summary>
+        /// <param name="user"></param>
         private void AddUser(QuizUser user)
         {
             user.AddSession(this.Code);
             this.QuizUsers.Add(user);
         }
 
+        /// <summary>
+        /// Retourne une liste d’utilisateurs avec comme attributs le nom et score si disponible
+        /// </summary>
+        /// <returns></returns>
         private List<object> GetUsers()
         {
             return this.QuizUsers
@@ -155,11 +169,20 @@ namespace BigBirdie.Models
                 .ToList<object>();
         }
 
+        /// <summary>
+        /// Enlève un utilisateur de la session
+        /// </summary>
+        /// <param name="user"></param>
         public void RemoveUser(QuizUser user)
         {
             this.QuizUsers.RemoveAll(u => u.UserName == user.UserName);
         }
 
+        /// <summary>
+        /// Essaye d’ajouter un utilisateur
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>vrai si succès (déjà présent ou ajout ok), faux sinon (session démarrée ou pleine)</returns>
         public bool TryAddUser(QuizUser user)
         {
             if (this.QuizUsers.Any(u => u.UserName == user.UserName))
@@ -172,6 +195,10 @@ namespace BigBirdie.Models
             return true;
         }
 
+        /// <summary>
+        /// Renvoie l’état de la session sous format JSON
+        /// </summary>
+        /// <returns></returns>
         public string Serialize()
         {
             JsonSerializerOptions options = new JsonSerializerOptions

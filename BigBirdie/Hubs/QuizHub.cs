@@ -49,6 +49,12 @@ namespace BigBirdie.Hubs
             this.QuizService.StartSession(code, Username);
 		}
 
+        public void SessionSettings(string code, SessionSettings settings)
+		{
+            if (this.QuizService.IsSessionOwner(code, Username))
+                this.QuizService.ApplySettings(code, settings);
+		}
+
         public void SendAnswer(string code, string answer)
 		{
             try

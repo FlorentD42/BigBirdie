@@ -40,6 +40,10 @@ connection.on("SessionUpdate", (sessionJson) => {
             var style = user.Name == session.Owner ? "owner-card" : "user-card";
             $("#usersDiv").append([{ user: user.Name, style: style }].map(userTemplate));
         });
+
+        $("#sessionSize").val(session.MaxSize);
+        $("#nbQuestions").val(session.NumberQuestions);
+        $("#questionTimer").val(session.QuestionTimer);
     }
     else if (session.State == "QUESTION") {
         $("#lobby").hide();
@@ -115,6 +119,7 @@ connection.on("UpdateTimer", (timeLeft) => {
 connection.on("IsOwner", () => {
     $("#startButton").show();
     $("#continueButton").show();
+    $("select").removeAttr("disabled");
 });
 
 function setProgressBar(percent) {
@@ -160,6 +165,7 @@ async function main() {
         await connection.invoke("StartSession", code);
     });
 
+    // bouton Continuer
     $("#continueButton").click(async () => {
         await connection.invoke("NextQuestion", code);
     });
@@ -181,8 +187,13 @@ async function main() {
 
     // changement dans les règles du salon
     $(".rule-select").change(function () {
-        $(".rule-select option:selected").each(function () {
-            console.log($(this).text());
+        var sessionSize = $("#sessionSize option:selected").text();
+        var nbQuestions = $("#nbQuestions option:selected").text();
+        var questionTimer = $("#questionTimer option:selected").text();
+        connection.invoke("SessionSettings", code, {
+            SessionSize: parseInt(sessionSize),
+            NbQuestions: parseInt(nbQuestions),
+            QuestionTimer: parseInt(questionTimer)
         });
     });
 
