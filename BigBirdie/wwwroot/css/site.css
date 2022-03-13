@@ -6,6 +6,7 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+@import "./vars.css";
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -11120,27 +11121,36 @@ textarea.form-control-lg {
   }
 }
 html {
+  position: relative;
+  min-height: 100%;
   font-size: 14px;
 }
-
 @media (min-width: 768px) {
   html {
     font-size: 16px;
   }
 }
-html {
-  position: relative;
-  min-height: 100%;
-}
 
 body {
+  background-color: var(--c-background-dark);
   margin-bottom: 60px;
-  background-color: #2C144D;
   font-family: "Red Hat Display", sans-serif;
 }
 
+.main-container {
+  background-color: var(--c-background);
+  height: calc(100% - 60px);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+@media (max-width: 1400px) {
+  .main-container {
+    max-width: 100%;
+  }
+}
+
 .twitch-button {
-  background-color: #9146FF;
+  background-color: var(--c-twitch);
   color: #fff;
   font-weight: 500;
   font-size: 25px;
@@ -11166,6 +11176,8 @@ body {
   border-radius: 50px !important;
   box-shadow: 3px 3px #AC4674;
   background-image: url("/img/BigBirdieBackground.png");
+  background-repeat: repeat;
+  background-size: 20rem;
 }
 
 .border-text {

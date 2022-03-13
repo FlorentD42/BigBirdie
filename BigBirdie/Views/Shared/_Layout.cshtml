@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BigBirdie.styles.css" asp-append-version="true" />
+    @*<link rel="stylesheet" href="~/BigBirdie.styles.css" asp-append-version="true" />*@
 </head>
 <body>
 
-    <main role="main" class="container">
-        <div class="p-4 my-4 text-center bg-image border-main h-100">
+    <main role="main" class="main-container p-4 my-4 border-main" >
+        <div class=" text-center bg-image  h-100">
             @RenderBody()
         </div>
     </main>

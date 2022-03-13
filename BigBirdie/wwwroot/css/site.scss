@@ -1,28 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "../lib/bootstrap/scss/bootstrap";
+@import "./vars.css";
+
 html {
+    position: relative;
+    min-height: 100%;
     font-size: 14px;
-}
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    @media (min-width: 768px) {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
-  background-color: #2C144D;
+    background-color: var(--c-background-dark);
+    margin-bottom: 60px;
     font-family: 'Red Hat Display', sans-serif;
 }
 
+.main-container {
+    background-color: var(--c-background);
+    height: calc(100% - 60px);
+    max-width: 1400px;
+    margin: 0 auto;
+
+    @media (max-width: 1400px) {
+        max-width: 100%;
+
+    }
+}
+
 .twitch-button {
-    background-color: #9146FF;
+    background-color: var(--c-twitch);
     color: #fff;
     font-weight: 500;
     font-size: 25px;
@@ -48,6 +57,8 @@ body {
     border-radius: 50px !important;
     box-shadow: 3px 3px #AC4674;
     background-image: url('/img/BigBirdieBackground.png');
+    background-repeat: repeat;
+    background-size:20rem;
 }
 
 .border-text {
@@ -55,6 +66,7 @@ body {
     border: 5px solid #A50E52;
     border-radius: 10px;
 }
+
 .btn-question {
     background: #AC4674;
     box-shadow: 3px 7px 0px 3px #A50E52;
@@ -97,7 +109,7 @@ body {
     border: 5px solid #A50E52;
     border-radius: 10px;
     min-height: 110px;
-    position:relative;
+    position: relative;
     align-items: center;
     font-style: normal;
     font-weight: bold;
@@ -112,12 +124,10 @@ body {
     background: #44B37F;
     box-shadow: 3px 5px 0px 3px #047E4F;
     border-radius: 10px;
-
     font-style: normal;
     font-weight: bold;
     font-size: 42px;
     line-height: 48px;
-
     text-align: center;
     color: #FFFFFF;
     text-shadow: 2px 4px 0px rgba(0, 0, 0, 0.25);
@@ -157,6 +167,8 @@ body {
     background-color: #44B37F;
     border-radius: 0 0 0.25rem 0.25rem;
 }
+
 .progress-bar {
     background-color: #047e4f;
 }
+
