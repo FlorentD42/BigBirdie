@@ -11133,20 +11133,32 @@ html {
 
 body {
   background-color: var(--c-background-dark);
-  margin-bottom: 60px;
   font-family: "Red Hat Display", sans-serif;
 }
 
 .main-container {
+  border: 5px solid #44b37f !important;
+  border-radius: 50px !important;
+  box-shadow: 3px 3px #AC4674;
+  background-image: url("/img/BigBirdieBackground.png");
+  background-repeat: repeat;
+  background-size: 20rem;
   background-color: var(--c-background);
-  height: calc(100% - 60px);
+  height: calc(100vh - 60px - 1rem);
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 1rem auto;
 }
 @media (max-width: 1400px) {
   .main-container {
     max-width: 100%;
   }
+}
+
+.frame {
+  padding: 1rem;
+  background-color: var(--c-background);
+  border: 2px solid var(--c-background-light);
+  border-radius: 1rem;
 }
 
 .twitch-button {
@@ -11169,15 +11181,6 @@ body {
 .btn-labeled {
   padding-top: 0;
   padding-bottom: 0;
-}
-
-.border-main {
-  border: 5px solid #44b37f !important;
-  border-radius: 50px !important;
-  box-shadow: 3px 3px #AC4674;
-  background-image: url("/img/BigBirdieBackground.png");
-  background-repeat: repeat;
-  background-size: 20rem;
 }
 
 .border-text {

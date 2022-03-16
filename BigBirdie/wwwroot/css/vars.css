@@ -1,5 +1,13 @@
 ﻿:root {
+    //colors
     --c-background: #2b134d;
     --c-background-dark: #251837;
+    --c-background-light: #443063;
     --c-twitch: #9146FF;
+
+    //Breakpoints
+    --mobile:576px;
+    --tablet:768px;
+    --laptop:992px;
+    --desktop:1200px;
 }
