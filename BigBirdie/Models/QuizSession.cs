@@ -3,6 +3,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Timers;
 using Timer = System.Timers.Timer;
+using BigBirdie.QuizzDB;
+using Microsoft.EntityFrameworkCore;
 
 namespace BigBirdie.Models
 {
@@ -25,28 +27,33 @@ namespace BigBirdie.Models
         public string Owner { get; private set; }
         public int MaxSize { get; set; }
         public int NumberQuestions { get; set; }
-        private List<QuizItem> Questions { get; set; }
-        public QuizItem? CurrentQuestion { get => Questions.ElementAtOrDefault(QuestionIndex); }
+        private List<QuizzItem> Questions { get; set; }
+        public QuizzItem? CurrentQuestion { get => Questions.ElementAtOrDefault(QuestionIndex); }
         private int QuestionIndex { get; set; }
         public int QuestionTimer { get; set; }
         private Timer Timer { get; set; }
         private int TimerCounter;
         public EventHandler? TimedOut;
         public EventHandler? UpdateTimer;
+        public string Lang { get; set; }
         public SessionState State { get; private set; }
+
+        public QuizzDbContext QuizzDB;
 
         public QuizSession(string code, string owner)
         {
             this.Code = code;
             this.Owner = owner;
             this.MaxSize = 20;
-            this.Questions = new List<QuizItem>();
+            this.Questions = new List<QuizzItem>();
             this.QuestionIndex = -1;
             this.NumberQuestions = 10;
             this.QuestionTimer = 10;
+            this.Lang = "Fr";
             this.Timer = new Timer(100);
             this.Timer.Elapsed += Timer_Elapsed;
             this.State = SessionState.LOBBY;
+            this.QuizzDB = new QuizzDbContext();
         }
 
         /// <summary>
@@ -54,10 +61,8 @@ namespace BigBirdie.Models
         /// </summary>
 		private void LoadQuiz()
 		{
-            string filepath = @"Resources/quiz-easy.json";
-            Utf8JsonReader reader = new Utf8JsonReader(File.ReadAllBytes(filepath));
-
-            List<QuizItem> items = JsonSerializer.Deserialize<List<QuizItem>>(ref reader)!;
+            // introduction de la langue à faire
+            List<QuizzItem> items = this.QuizzDB.quizzItem.Where(e => e.Lang==this.Lang).ToList();
 
             this.NumberQuestions = Math.Min(this.NumberQuestions, items.Count);
 
@@ -111,7 +116,7 @@ namespace BigBirdie.Models
         /// <summary>
         /// Retourne la question actuelle ou null
         /// </summary>
-        private QuizItem? GetQuestion()
+        private QuizzItem? GetQuestion()
 		{
             return this.Questions.ElementAtOrDefault(this.QuestionIndex);
 		}
@@ -119,11 +124,11 @@ namespace BigBirdie.Models
         /// <summary>
         /// Retourne l’index de la réponse
         /// </summary>
-        public int GetAnswer()
+        public string GetAnswer()
 		{
-            QuizItem? question = this.GetQuestion();
-            if (question == null) return -1;
-            return question.Propositions.IndexOf(question.Reponse!);
+            QuizzItem? question = this.GetQuestion();
+            if (question == null) return "";
+            return question.Rep;
         }
 
         /// <summary>

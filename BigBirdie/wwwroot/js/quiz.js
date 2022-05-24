@@ -44,6 +44,8 @@ connection.on("SessionUpdate", (sessionJson) => {
         $("#sessionSize").val(session.MaxSize);
         $("#nbQuestions").val(session.NumberQuestions);
         $("#questionTimer").val(session.QuestionTimer);
+        $("#lang").val(session.Lang);
+
     }
     else if (session.State == "QUESTION") {
         $("#lobby").hide();
@@ -53,15 +55,19 @@ connection.on("SessionUpdate", (sessionJson) => {
         quizState = session.State;
         var question = session.CurrentQuestion;
 
-        if (question.id == questionId)
+        if (question.Id == questionId)
             return;
-        questionId = question.id;
+        questionId = question.Id;
 
-        $("#question_text").text(question.question);
-        $("#answer_0").text(question.propositions[0]);
-        $("#answer_1").text(question.propositions[1]);
-        $("#answer_2").text(question.propositions[2]);
-        $("#answer_3").text(question.propositions[3]);
+        $("#question_text").text(question.Question);
+        $("#answer_0").text(question.prop1);
+        $("#radio_answer_0").val(question.prop1);
+        $("#answer_1").text(question.prop2);
+        $("#radio_answer_1").val(question.prop2);
+        $("#answer_2").text(question.prop3);
+        $("#radio_answer_2").val(question.prop3);
+        $("#answer_3").text(question.prop4);
+        $("#radio_answer_3").val(question.prop4);
 
         $(".btn-check").prop("checked", false);
         $("input[type=radio][name=btnradio]").prop("disabled", false);
@@ -92,14 +98,14 @@ connection.on("SessionUpdate", (sessionJson) => {
 });
 
 // réception de l’id de la réponse à la question courante
-connection.on("SendAnswer", (answerId) => {
+connection.on("SendAnswer", (answer) => {
     $("input[type=radio][name=btnradio]").prop("disabled", true);
     $("input:radio").removeAttr("checked");
     $("#continueButton").prop("disabled", false);
 
     setProgressBar(0);
 
-    $("#answer_" + answerId).addClass("btn-success");
+    $("#answer_" + answer).addClass("btn-success");
     quizState = "ANSWER";
 });
 
@@ -190,10 +196,12 @@ async function main() {
         var sessionSize = $("#sessionSize option:selected").text();
         var nbQuestions = $("#nbQuestions option:selected").text();
         var questionTimer = $("#questionTimer option:selected").text();
+        var lang = $("#lang option:selected").text();
         connection.invoke("SessionSettings", code, {
             SessionSize: parseInt(sessionSize),
             NbQuestions: parseInt(nbQuestions),
-            QuestionTimer: parseInt(questionTimer)
+            QuestionTimer: parseInt(questionTimer),
+            lang:lang
         });
     });
 

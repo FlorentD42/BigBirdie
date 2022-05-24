@@ -1,5 +1,6 @@
 ﻿using BigBirdie.Account;
 using BigBirdie.Models;
+using BigBirdie.QuizzDB;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -27,6 +28,40 @@ namespace BigBirdie.Controllers
 		public IActionResult Create()
 		{
 			return View();
+		}
+
+        public async Task <IActionResult> UserEdit(string id)
+		{
+
+			ApplicationUser user = await UserManager.FindByIdAsync(id);
+			var roles = await UserManager.GetRolesAsync(user);
+			return View(new UserEdit
+			{
+				User = user,
+				UserRoles = roles,
+				RolesAvailables = RoleManager.Roles.Select(role => new ApplicationRole(role.Name)).ToList()
+			});
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> UserEdit([Required] UserModification model)
+		{
+			IdentityResult result;
+			model.oldRoles = model.oldRoles != null?model.oldRoles :new string[0];
+			model.newRoles = model.newRoles != null? model.newRoles : new string[0];
+			var rolesToDelete = model.oldRoles?.Where(e => !model.newRoles.Contains(e));
+			var rolesToAdd = model.newRoles?.Where(e => !model.oldRoles.Contains(e));
+			ApplicationUser user = await UserManager.FindByIdAsync(model.userId);
+			if (user != null)
+			{
+				result = await UserManager.AddToRolesAsync(user, rolesToAdd);
+				if (!result.Succeeded)
+					return BadRequest(result);//Errors(result);
+				result = await UserManager.RemoveFromRolesAsync(user, rolesToDelete);
+				if (!result.Succeeded)
+					return BadRequest(result);
+			}
+			return RedirectToAction("Index");
 		}
 
 		[HttpPost]

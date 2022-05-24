@@ -1,0 +1,102 @@
+﻿@model IEnumerable<QuizzItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div class="text-white">
+    <form asp-action="Create" method="get">
+        <button type="submit" class="btn btn-primary">Créer</button>
+    </form>
+    
+    <form asp-action="Import" method="get">
+        <button type="submit" class="btn btn-primary">Importer</button>
+    </form>
+</div>
+<div style="height: 700px;overflow: auto;font-size: 11px;">
+    <table class="table text-white">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Lang)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Theme)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Question)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.prop1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.prop2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.prop3)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.prop4)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rep)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Niveau)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Anecdote)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Wiki)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Lang)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Theme)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Question)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.prop1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.prop2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.prop3)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.prop4)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rep)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Niveau)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Anecdote)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Wiki)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -59,8 +59,7 @@ namespace BigBirdie.Hubs
 		{
             try
             {
-                int ans = Convert.ToInt32(answer);
-                this.QuizService.SendAnswer(code, Username, ans);
+                this.QuizService.SendAnswer(code, Username, answer);
             }
             catch
 			{

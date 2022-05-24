@@ -24,9 +24,9 @@
 		/// <summary>
 		/// Envoie l’id de la bonne réponse aux clients
 		/// </summary>
-		/// <param name="answerId"></param>
+		/// <param name="answer"></param>
 		/// <returns></returns>
-		Task SendAnswer(int answerId);
+		Task SendAnswer(string answer);
 
 		/// <summary>
 		/// Envoie la valeur restante au timer de question pour mettre la progress bar à jour

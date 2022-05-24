@@ -1,0 +1,86 @@
+﻿@model QuizzItem
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1 class="text-white">Edit</h1>
+<hr />
+<form asp-action="Edit">
+    <div class="row text-white">
+    
+        <div class="col-md-3">
+             <a href="/" class="btn btn-danger">Back</a>
+        </div>
+
+
+        <div class="col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Lang" class="control-label"></label>
+                <input asp-for="Lang" class="form-control" />
+                <span asp-validation-for="Lang" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Theme" class="control-label"></label>
+                <input asp-for="Theme" class="form-control" />
+                <span asp-validation-for="Theme" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Question" class="control-label"></label>
+                <input asp-for="Question" class="form-control" />
+                <span asp-validation-for="Question" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="prop1" class="control-label"></label>
+                <input asp-for="prop1" class="form-control" />
+                <span asp-validation-for="prop1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="prop2" class="control-label"></label>
+                <input asp-for="prop2" class="form-control" />
+                <span asp-validation-for="prop2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="prop3" class="control-label"></label>
+                <input asp-for="prop3" class="form-control" />
+                <span asp-validation-for="prop3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="prop4" class="control-label"></label>
+                <input asp-for="prop4" class="form-control" />
+                <span asp-validation-for="prop4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rep" class="control-label"></label>
+                <input asp-for="Rep" class="form-control" />
+                <span asp-validation-for="Rep" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Niveau" class="control-label"></label>
+                <input asp-for="Niveau" class="form-control" />
+                <span asp-validation-for="Niveau" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Anecdote" class="control-label"></label>
+                <input asp-for="Anecdote" class="form-control" />
+                <span asp-validation-for="Anecdote" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Wiki" class="control-label"></label>
+                <input asp-for="Wiki" class="form-control" />
+                <span asp-validation-for="Wiki" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+ </form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

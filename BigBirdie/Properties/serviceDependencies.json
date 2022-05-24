@@ -3,6 +3,9 @@
     "secrets1": {
       "type": "secrets"
     },
+    "secrets2": {
+      "type": "secrets"
+    },
     "mssql1": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:DefaultConnection"

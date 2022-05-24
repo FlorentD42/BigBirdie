@@ -1,0 +1,83 @@
+﻿@model BigBirdie.Models.QuizzItem
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>QuizzItem</h4>
+<hr />
+<div class="row text-white">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Lang" class="control-label"></label>
+                <input asp-for="Lang" class="form-control" />
+                <span asp-validation-for="Lang" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Theme" class="control-label"></label>
+                <input asp-for="Theme" class="form-control" />
+                <span asp-validation-for="Theme" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Question" class="control-label"></label>
+                <input asp-for="Question" class="form-control" />
+                <span asp-validation-for="Question" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="prop1" class="control-label"></label>
+                <input asp-for="prop1" class="form-control" />
+                <span asp-validation-for="prop1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="prop2" class="control-label"></label>
+                <input asp-for="prop2" class="form-control" />
+                <span asp-validation-for="prop2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="prop3" class="control-label"></label>
+                <input asp-for="prop3" class="form-control" />
+                <span asp-validation-for="prop3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="prop4" class="control-label"></label>
+                <input asp-for="prop4" class="form-control" />
+                <span asp-validation-for="prop4" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rep" class="control-label"></label>
+                <input asp-for="Rep" class="form-control" />
+                <span asp-validation-for="Rep" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Niveau" class="control-label"></label>
+                <input asp-for="Niveau" class="form-control" />
+                <span asp-validation-for="Niveau" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Anecdote" class="control-label"></label>
+                <input asp-for="Anecdote" class="form-control" />
+                <span asp-validation-for="Anecdote" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Wiki" class="control-label"></label>
+                <input asp-for="Wiki" class="form-control" />
+                <span asp-validation-for="Wiki" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

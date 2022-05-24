@@ -16,20 +16,38 @@
 <div class="col-lg-4 py-4 mx-auto">
     <p class="fs-2 text-white"><strong>Salut @Context.User.Identity.Name !</strong> <img src="/img/emotes/leapriHi_1.png" /></p>
         
-    @if (@Context.User.IsInRole("Viewer"))
+    @if (@Context.User.IsInRole("Banni"))
     {
-    <form class="d-grid gap-2 my-4" asp-action="Join" asp-controller="Quiz" method="get">
-        <input type="text" name="id" placeholder="Code" class="form-control form-control-lg code-input" required/>
-        <button type="submit" class="btn main-button">Rejoindre</button>
-    </form>
+        <div class="fs-2 text-danger">Vous êtes BAN !</div>
+        <div>
+            <button  class="btn main-button">Demande de déban ( à venir )</button>
+        </div>
     }
+    else
+    {
+        @if (@Context.User.IsInRole("Viewer"))
+        {
+            <form class="d-grid gap-2 my-4" asp-action="Join" asp-controller="Quiz" method="get">
+                <input type="text" name="id" placeholder="Code" class="form-control form-control-lg code-input" required/>
+                <button type="submit" class="btn main-button">Rejoindre</button>
+            </form>
+        }
 
-    @if (@Context.User.IsInRole("Admin"))
-    {
-    <form class="d-grid gap-2 my-4" asp-action="Join" asp-controller="Quiz" method="post">
-        <button type="submit" class="btn main-button">Créer un salon</button>
-    </form>
+        @if (@Context.User.IsInRole("Admin"))
+        {
+            <form class="d-grid gap-2 my-4" asp-action="Join" asp-controller="Quiz" method="post">
+                <button type="submit" class="btn main-button">Créer un salon</button>
+            </form>
+            <form class="d-grid gap-2 my-4" asp-controller="QuizzManager" method="get">
+                <button type="submit" class="btn main-button">Gestion questions</button>
+            </form>
+            <form class="d-grid gap-2 my-4" asp-controller="Role" method="get">
+                <button type="submit" class="btn main-button">Gestion utilisateurs</button>
+            </form>
+        }
     }
+        
+    
 
 </div>
 }

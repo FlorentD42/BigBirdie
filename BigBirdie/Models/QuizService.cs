@@ -68,7 +68,7 @@ namespace BigBirdie.Models
             session.MaxSize = settings.SessionSize;
             session.NumberQuestions = settings.NbQuestions;
             session.QuestionTimer = settings.QuestionTimer;
-
+            session.Lang = settings.Lang;
             this.HubContext.Clients.Group(session.Code).SessionUpdate(session.Serialize());
         }
 
@@ -117,12 +117,12 @@ namespace BigBirdie.Models
             session.TimedOut -= QuestionTimeOut;
             session.UpdateTimer -= UpdateTimer;
 
-            int answer = session.GetAnswer();
+            string answer = session.GetAnswer();
 
             this.HubContext.Clients.Group(session.Code).SendAnswer(answer);
         }
 
-		public void SendAnswer(string code, string username, int answer)
+		public void SendAnswer(string code, string username, string answer)
 		{
             QuizSession? session = this.GetSession(code);
             QuizUser? user = this.GetUser(username);

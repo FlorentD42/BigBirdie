@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using BigBirdie.Models;
 
 namespace BigBirdie.Account
 {
@@ -10,6 +11,7 @@ namespace BigBirdie.Account
 		{
 
 		}
+
 
         /// <summary>
         /// Ajout des rôles par défaut
