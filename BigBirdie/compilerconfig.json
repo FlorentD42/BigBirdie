@@ -6,5 +6,9 @@
   {
     "outputFile": "wwwroot/css/vars.css",
     "inputFile": "wwwroot/css/vars.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/quizz.css",
+    "inputFile": "wwwroot/css/quizz.scss"
   }
 ]

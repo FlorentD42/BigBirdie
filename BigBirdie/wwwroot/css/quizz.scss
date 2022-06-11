@@ -1,0 +1,25 @@
+﻿#question {
+    .container > :first-child {
+        @media screen and (max-width: 768px) {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            // Answers & title
+            > div {
+                width: 100%;
+                margin: 0;
+            }
+
+            .question-title {
+                font-size: 1.7rem;
+                line-height: initial;
+            }
+            // Answers
+            .btn-group {
+                width: 80%;
+                margin: auto;
+            }
+        }
+    }
+
+}
