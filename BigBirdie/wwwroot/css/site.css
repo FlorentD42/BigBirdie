@@ -6,7 +6,6 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
-@import "./vars.css";
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
@@ -11137,7 +11136,7 @@ body {
 }
 
 .main-container {
-  border: 5px solid #44b37f !important;
+  border: 5px solid var(--c-green) !important;
   border-radius: 50px !important;
   box-shadow: 3px 3px #AC4674;
   background-image: url("/img/BigBirdieBackground.png");
@@ -11185,13 +11184,13 @@ body {
 
 .border-text {
   background: #43A882;
-  border: 5px solid #A50E52;
+  border: 5px solid var(--c-dark-red);
   border-radius: 10px;
 }
 
 .btn-question {
   background: #AC4674;
-  box-shadow: 3px 7px 0px 3px #A50E52;
+  box-shadow: 3px 7px 0px 3px var(--c-dark-red);
   color: #fff;
   border-radius: 10px;
   padding: 1rem 1.5rem;
@@ -11204,16 +11203,16 @@ body {
 }
 
 .btn-success {
-  background: #44B37F !important;
-  box-shadow: 3px 5px 0px 3px #047E4F !important;
+  background: var(--c-validation) !important;
+  box-shadow: 3px 5px 0px 3px var(--c-validation-secondary) !important;
 }
 
 .btn-check:checked + .btn-question {
-  background-color: #A50E52;
+  background-color: var(--c-dark-red);
 }
 
 .btn-check:hover + .btn-question {
-  background-color: #A50E52;
+  background-color: var(--c-dark-red);
   color: white;
 }
 
@@ -11222,13 +11221,14 @@ body {
 }
 
 .btn-check:focus + .btn-question, .btn-check:checked + .btn-question {
-  box-shadow: 3px 3px 0px 3px #610a31;
+  box-shadow: 3px 5px 0px 3px var(--c-dark-red);
+  outline: 3px solid var(--c-green);
   transform: translateY(4px);
 }
 
 .question-title {
   background: #43A882;
-  border: 5px solid #A50E52;
+  border: 5px solid var(--c-dark-red);
   border-radius: 10px;
   min-height: 110px;
   position: relative;
@@ -11240,10 +11240,13 @@ body {
   text-align: center;
   color: #FFFFFF;
   text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .main-button {
-  background: #44B37F;
+  background: var(--c-green);
   box-shadow: 3px 5px 0px 3px #047E4F;
   border-radius: 10px;
   font-style: normal;
@@ -11256,7 +11259,7 @@ body {
 }
 
 .code-input {
-  border: 5px solid #A50E52;
+  border: 5px solid var(--c-dark-red);
 }
 
 .h2-title {
@@ -11266,12 +11269,12 @@ body {
 .pink-content {
   color: white;
   background: #AC4674;
-  box-shadow: 3px 5px 0px 3px #A50E52;
+  box-shadow: 3px 5px 0px 3px var(--c-dark-red);
   border-radius: 10px;
 }
 
 .user-card {
-  background: #44B37F;
+  background: var(--c-green);
   border-radius: 5px;
 }
 
@@ -11283,13 +11286,48 @@ body {
 }
 
 .progress {
-  position: absolute;
   width: 100%;
-  bottom: 0;
-  background-color: #44B37F;
+  background-color: var(--c-green);
   border-radius: 0 0 0.25rem 0.25rem;
 }
 
 .progress-bar {
+  padding-top: 50px;
   background-color: #047e4f;
+}
+
+@media screen and (max-width: 768px) {
+  #big-birdie-logo {
+    height: 7rem;
+  }
+
+  .lobby-content {
+    flex-direction: column;
+  }
+}
+@media screen and (max-width: 576px) {
+  #big-birdie-logo {
+    height: 5rem;
+  }
+
+  .btn.main-button {
+    width: 90%;
+    margin: auto;
+  }
+
+  .btn.main-button, .btn-question {
+    height: max-content;
+    font-size: 1.5rem;
+    line-height: normal;
+    text-shadow: 1px 2px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 1.5px 3px 0px 1.5px #047E4F;
+  }
+
+  .btn-question {
+    box-shadow: 1.5px 3px 0px 1.5px var(--c-dark-red);
+  }
+
+  #startButton {
+    margin-bottom: 1rem !important;
+  }
 }

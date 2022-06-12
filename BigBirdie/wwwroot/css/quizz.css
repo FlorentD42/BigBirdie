@@ -1,0 +1,19 @@
+﻿@media screen and (max-width: 768px) {
+  #question .container > :first-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  #question .container > :first-child > div {
+    width: 100%;
+    margin: 0;
+  }
+  #question .container > :first-child .question-title {
+    font-size: 1.7rem;
+    line-height: initial;
+  }
+  #question .container > :first-child .btn-group {
+    width: 80%;
+    margin: auto;
+  }
+}

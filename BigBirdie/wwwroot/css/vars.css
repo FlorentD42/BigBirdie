@@ -1,13 +1,18 @@
 ﻿:root {
-    //colors
     --c-background: #2b134d;
     --c-background-dark: #251837;
     --c-background-light: #443063;
     --c-twitch: #9146FF;
+    --c-twitch-secondary: #6441a5;
+    --c-dark-red: #A50E52;
+    --c-green: #44B37F;
+    --c-validation: #2d87d4;
+    --c-validation-secondary: #22569da4;
+}
 
-    //Breakpoints
-    --mobile:576px;
-    --tablet:768px;
-    --laptop:992px;
-    --desktop:1200px;
+body {
+    $mobile:576px;
+    $tablet:768px;
+    $laptop:992px;
+    $desktop:1200px;
 }
